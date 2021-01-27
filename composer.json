@@ -16,5 +16,8 @@
     "psr-4": {
       "VitesseCms\\Mustache\\": "src/"
     }
+  },
+  "require": {
+    "vitessecms/sef": "~0.0.1"
   }
 }
