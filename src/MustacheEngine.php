@@ -17,19 +17,20 @@ class MustacheEngine extends Mustache
         ViewBaseInterface $view,
         Engine $mustacheEngine,
         DiInterface $di = null
-    ) {
+    )
+    {
         parent::__construct($view, $di);
         $this->mustache = $mustacheEngine;
         $this->parsedPaths = [];
     }
 
-    public function render( $path, $params, $mustClean = false): void
+    public function render($path, $params, $mustClean = false): void
     {
-        if(!is_file($path)) {
+        if (!is_file($path)) {
             die($path);
         }
 
-        if(empty($this->parsedPaths[$path])) :
+        if (empty($this->parsedPaths[$path])) :
             $this->parsedPaths[$path] = file_get_contents($path);
         endif;
 

@@ -10,6 +10,7 @@ namespace VitesseCms\Mustache;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 use Phalcon\Di;
 
 /**
@@ -59,10 +60,10 @@ class Loader_FilesystemLoader implements \Mustache_Loader
      *         'extension' => '.ms',
      *     );
      *
+     * @param string $baseDir Base directory containing Mustache template files
+     * @param array $options Array of Loader options (core: array())
      * @throws Mustache_Exception_RuntimeException if $baseDir does not exist
      *
-     * @param string $baseDir Base directory containing Mustache template files
-     * @param array  $options Array of Loader options (core: array())
      */
     public function __construct(string $baseDir, array $options = [])
     {
@@ -87,6 +88,17 @@ class Loader_FilesystemLoader implements \Mustache_Loader
     }
 
     /**
+     * Only check if baseDir is a directory and requested template are files if
+     * baseDir is using the filesystem stream wrapper.
+     *
+     * @return bool Whether to check `is_dir` and `file_exists`
+     */
+    protected function shouldCheckPath(): bool
+    {
+        return strpos($this->baseDir, '://') === false || strpos($this->baseDir, 'file://') === 0;
+    }
+
+    /**
      * Load a Template by name.
      *
      *     $loader = new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views');
@@ -99,8 +111,8 @@ class Loader_FilesystemLoader implements \Mustache_Loader
     public function load($name): string
     {
         $this->setBaseDir($this->baseDirOrg);
-        if(!is_file($this->baseDir.'/'.$name.$this->extension)) :
-            $this->setBaseDir(Di::getDefault()->get('config')->get('defaultTemplateDir').'views/partials');
+        if (!is_file($this->baseDir . '/' . $name . $this->extension)) :
+            $this->setBaseDir(Di::getDefault()->get('config')->get('defaultTemplateDir') . 'views/partials');
         endif;
 
         if (!isset($this->templates[$name])) {
@@ -111,13 +123,21 @@ class Loader_FilesystemLoader implements \Mustache_Loader
     }
 
     /**
+     * @param string $dir
+     */
+    protected function setBaseDir(string $dir): void
+    {
+        $this->baseDir = $dir;
+    }
+
+    /**
      * Helper function for loading a Mustache file by name.
-     *
-     * @throws Mustache_Exception_UnknownTemplateException If a template file is not found
      *
      * @param string $name
      *
      * @return string Mustache Template source
+     * @throws Mustache_Exception_UnknownTemplateException If a template file is not found
+     *
      */
     protected function loadFile(string $name): string
     {
@@ -145,24 +165,5 @@ class Loader_FilesystemLoader implements \Mustache_Loader
         }
 
         return $fileName;
-    }
-
-    /**
-     * Only check if baseDir is a directory and requested template are files if
-     * baseDir is using the filesystem stream wrapper.
-     *
-     * @return bool Whether to check `is_dir` and `file_exists`
-     */
-    protected function shouldCheckPath(): bool
-    {
-        return strpos($this->baseDir, '://') === false || strpos($this->baseDir, 'file://') === 0;
-    }
-
-    /**
-     * @param string $dir
-     */
-    protected function setBaseDir(string $dir): void
-    {
-        $this->baseDir = $dir;
     }
 }
