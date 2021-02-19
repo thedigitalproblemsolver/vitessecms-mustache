@@ -10,6 +10,7 @@ namespace VitesseCms\Mustache;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 use Phalcon\Di;
 
 /**
@@ -26,17 +27,17 @@ use Phalcon\Di;
  */
 class Engine extends \Mustache_Engine
 {
-    const VERSION        = '2.11.1';
-    const SPEC_VERSION   = '1.1.2';
+    const VERSION = '2.11.1';
+    const SPEC_VERSION = '1.1.2';
 
-    const PRAGMA_FILTERS      = 'FILTERS';
-    const PRAGMA_BLOCKS       = 'BLOCKS';
+    const PRAGMA_FILTERS = 'FILTERS';
+    const PRAGMA_BLOCKS = 'BLOCKS';
     const PRAGMA_ANCHORED_DOT = 'ANCHORED-DOT';
 
     // Known pragmas
     private static $knownPragmas = array(
-        self::PRAGMA_FILTERS      => true,
-        self::PRAGMA_BLOCKS       => true,
+        self::PRAGMA_FILTERS => true,
+        self::PRAGMA_BLOCKS => true,
         self::PRAGMA_ANCHORED_DOT => true,
     );
 
@@ -88,11 +89,11 @@ class Engine extends \Mustache_Engine
      *         'loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views'),
      *
      *         // A Mustache loader instance for partials.
-     *         'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/views/partials'),
+     *         'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/Views/partials'),
      *
      *         // An array of Mustache partials. Useful for quick-and-dirty string template loading, but not as
      *         // efficient or lazy as a Filesystem (or database) loader.
-     *         'partials' => array('foo' => file_get_contents(dirname(__FILE__).'/views/partials/foo.mustache')),
+     *         'partials' => array('foo' => file_get_contents(dirname(__FILE__).'/Views/partials/foo.mustache')),
      *
      *         // An array of 'helpers'. Helpers can be global variables or objects, closures (e.g. for higher order
      *         // sections), or any other valid Mustache context value. They will be prepended to the context stack,
@@ -129,9 +130,9 @@ class Engine extends \Mustache_Engine
      *         'pragmas' => [Mustache_Engine::PRAGMA_FILTERS],
      *     );
      *
+     * @param array $options (core: array())
      * @throws Mustache_Exception_InvalidArgumentException If `escape` option is not callable
      *
-     * @param array $options (core: array())
      */
     public function __construct(array $options = array())
     {
@@ -143,7 +144,7 @@ class Engine extends \Mustache_Engine
             $cache = $options['cache'];
 
             if (is_string($cache)) {
-                $mode  = isset($options['cache_file_mode']) ? $options['cache_file_mode'] : null;
+                $mode = isset($options['cache_file_mode']) ? $options['cache_file_mode'] : null;
                 $cache = new \Mustache_Cache_FilesystemCache($cache, $mode);
             }
 
@@ -151,7 +152,7 @@ class Engine extends \Mustache_Engine
         }
 
         if (isset($options['cache_lambda_templates'])) {
-            $this->cacheLambdaTemplates = (bool) $options['cache_lambda_templates'];
+            $this->cacheLambdaTemplates = (bool)$options['cache_lambda_templates'];
         }
 
         if (isset($options['loader'])) {
@@ -205,21 +206,339 @@ class Engine extends \Mustache_Engine
     }
 
     /**
+     * Set partials for the current partials Loader instance.
+     *
+     * @param array $partials (core: array())
+     * @throws Mustache_Exception_RuntimeException If the current Loader instance is immutable
+     *
+     */
+    public function setPartials(array $partials = array())
+    {
+        if (!isset($this->partialsLoader)) {
+            $this->partialsLoader = new \Mustache_Loader_ArrayLoader();
+        }
+
+        if (!$this->partialsLoader instanceof \Mustache_Loader_MutableLoader) {
+            throw new \Mustache_Exception_RuntimeException('Unable to set partials on an immutable Mustache Loader instance');
+        }
+
+        $this->partialsLoader->setTemplates($partials);
+    }
+
+    /**
      * Shortcut 'render' invocation.
      *
      * Equivalent to calling `$mustache->loadTemplate($template)->render($context);`
      *
-     * @see Mustache_Engine::loadTemplate
-     * @see Mustache_Template::render
-     *
      * @param string $template
-     * @param mixed  $context  (core: array())
+     * @param mixed $context (core: array())
      *
      * @return string Rendered template
+     * @see Mustache_Template::render
+     *
+     * @see Mustache_Engine::loadTemplate
      */
     public function render($template, $context = array())
     {
         return $this->loadTemplate($template)->render($context);
+    }
+
+    /**
+     * Load a Mustache Template by name.
+     *
+     * @param string $name
+     *
+     * @return Mustache_Template
+     */
+    public function loadTemplate($name)
+    {
+        return $this->loadSource($this->getLoader()->load($name));
+    }
+
+    /**
+     * Instantiate and return a Mustache Template instance by source.
+     *
+     * Optionally provide a Mustache_Cache instance. This is used internally by Mustache_Engine::loadLambda to respect
+     * the 'cache_lambda_templates' configuration option.
+     *
+     * @param string $source
+     * @param Mustache_Cache $cache (core: null)
+     *
+     * @return Mustache_Template
+     * @see Mustache_Engine::loadTemplate
+     * @see Mustache_Engine::loadPartial
+     * @see Mustache_Engine::loadLambda
+     *
+     */
+    private function loadSource($source, \Mustache_Cache $cache = null)
+    {
+        $source = str_replace(
+            '[]',
+            '.' . Di::getDefault()->get('configuration')->getLanguageShort(),
+            $source
+        );
+
+        $className = $this->getTemplateClassName($source);
+
+        if (!isset($this->templates[$className])) {
+            if ($cache === null) {
+                $cache = $this->getCache();
+            }
+
+            if (!class_exists($className, false)) {
+                if (!$cache->load($className)) {
+                    $compiled = $this->compile($source);
+                    $cache->cache($className, $compiled);
+                }
+            }
+
+            $this->log(
+                \Mustache_Logger::DEBUG,
+                'Instantiating template: "{className}"',
+                array('className' => $className)
+            );
+
+            $this->templates[$className] = new $className($this);
+        }
+
+        return $this->templates[$className];
+    }
+
+    /**
+     * Helper method to generate a Mustache template class.
+     *
+     * @param string $source
+     *
+     * @return string Mustache Template class name
+     */
+    public function getTemplateClassName($source)
+    {
+        return $this->templateClassPrefix . md5(sprintf(
+                'version:%s,escape:%s,entity_flags:%i,charset:%s,strict_callables:%s,pragmas:%s,source:%s',
+                self::VERSION,
+                isset($this->escape) ? 'custom' : 'core',
+                $this->entityFlags,
+                $this->charset,
+                $this->strictCallables ? 'true' : 'false',
+                implode(' ', $this->getPragmas()),
+                $source
+            ));
+    }
+
+    /**
+     * Get the current globally enabled pragmas.
+     *
+     * @return array
+     */
+    public function getPragmas()
+    {
+        return array_keys($this->pragmas);
+    }
+
+    /**
+     * Get the current Mustache Cache instance.
+     *
+     * If no Cache instance has been explicitly specified, this method will instantiate and return a new one.
+     *
+     * @return Mustache_Cache
+     */
+    public function getCache()
+    {
+        if (!isset($this->cache)) {
+            $this->setCache(new \Mustache_Cache_NoopCache());
+        }
+
+        return $this->cache;
+    }
+
+    /**
+     * Set the Mustache Cache instance.
+     *
+     * @param Mustache_Cache $cache
+     */
+    public function setCache(\Mustache_Cache $cache)
+    {
+        if (isset($this->logger) && $cache->getLogger() === null) {
+            $cache->setLogger($this->getLogger());
+        }
+
+        $this->cache = $cache;
+    }
+
+    /**
+     * Helper method to compile a Mustache template.
+     *
+     * @param string $source
+     *
+     * @return string generated Mustache template class code
+     * @see Mustache_Compiler::compile
+     *
+     */
+    private function compile($source)
+    {
+        $tree = $this->parse($source);
+        $name = $this->getTemplateClassName($source);
+
+        $this->log(
+            \Mustache_Logger::INFO,
+            'Compiling template to "{className}" class',
+            array('className' => $name)
+        );
+
+        $compiler = $this->getCompiler();
+        $compiler->setPragmas($this->getPragmas());
+
+        return $compiler->compile($source, $tree, $name, isset($this->escape), $this->charset, $this->strictCallables, $this->entityFlags);
+    }
+
+    /**
+     * Helper method to parse a Mustache template.
+     *
+     * @param string $source
+     *
+     * @return array Token tree
+     * @see Mustache_Parser::parse
+     *
+     */
+    private function parse($source)
+    {
+        $parser = $this->getParser();
+        $parser->setPragmas($this->getPragmas());
+
+        return $parser->parse($this->tokenize($source));
+    }
+
+    /**
+     * Get the current Mustache Parser instance.
+     *
+     * If no Parser instance has been explicitly specified, this method will instantiate and return a new one.
+     *
+     * @return Mustache_Parser
+     */
+    public function getParser()
+    {
+        if (!isset($this->parser)) {
+            $this->parser = new \Mustache_Parser();
+        }
+
+        return $this->parser;
+    }
+
+    /**
+     * Set the Mustache Parser instance.
+     *
+     * @param Mustache_Parser $parser
+     */
+    public function setParser(\Mustache_Parser $parser)
+    {
+        $this->parser = $parser;
+    }
+
+    /**
+     * Helper method to tokenize a Mustache template.
+     *
+     * @param string $source
+     *
+     * @return array Tokens
+     * @see Mustache_Tokenizer::scan
+     *
+     */
+    private function tokenize($source)
+    {
+        return $this->getTokenizer()->scan($source);
+    }
+
+    /**
+     * Get the current Mustache Tokenizer instance.
+     *
+     * If no Tokenizer instance has been explicitly specified, this method will instantiate and return a new one.
+     *
+     * @return Mustache_Tokenizer
+     */
+    public function getTokenizer()
+    {
+        if (!isset($this->tokenizer)) {
+            $this->tokenizer = new \Mustache_Tokenizer();
+        }
+
+        return $this->tokenizer;
+    }
+
+    /**
+     * Set the Mustache Tokenizer instance.
+     *
+     * @param Mustache_Tokenizer $tokenizer
+     */
+    public function setTokenizer(\Mustache_Tokenizer $tokenizer)
+    {
+        $this->tokenizer = $tokenizer;
+    }
+
+    /**
+     * Add a log record if logging is enabled.
+     *
+     * @param int $level The logging level
+     * @param string $message The log message
+     * @param array $context The log context
+     */
+    private function log($level, $message, array $context = array())
+    {
+        if (isset($this->logger)) {
+            $this->logger->log($level, $message, $context);
+        }
+    }
+
+    /**
+     * Get the current Mustache Compiler instance.
+     *
+     * If no Compiler instance has been explicitly specified, this method will instantiate and return a new one.
+     *
+     * @return Mustache_Compiler
+     */
+    public function getCompiler()
+    {
+        if (!isset($this->compiler)) {
+            $this->compiler = new \Mustache_Compiler();
+        }
+
+        return $this->compiler;
+    }
+
+    /**
+     * Set the Mustache Compiler instance.
+     *
+     * @param Mustache_Compiler $compiler
+     */
+    public function setCompiler(\Mustache_Compiler $compiler)
+    {
+        $this->compiler = $compiler;
+    }
+
+    /**
+     * Get the current Mustache template Loader instance.
+     *
+     * If no Loader instance has been explicitly specified, this method will instantiate and return
+     * a StringLoader instance.
+     *
+     * @return Mustache_Loader
+     */
+    public function getLoader()
+    {
+        if (!isset($this->loader)) {
+            $this->loader = new \Mustache_Loader_StringLoader();
+        }
+
+        return $this->loader;
+    }
+
+    /**
+     * Set the Mustache template Loader instance.
+     *
+     * @param Mustache_Loader $loader
+     */
+    public function setLoader(\Mustache_Loader $loader)
+    {
+        $this->loader = $loader;
     }
 
     /**
@@ -253,53 +572,6 @@ class Engine extends \Mustache_Engine
     }
 
     /**
-     * Get the current globally enabled pragmas.
-     *
-     * @return array
-     */
-    public function getPragmas()
-    {
-        return array_keys($this->pragmas);
-    }
-
-    /**
-     * Set the Mustache template Loader instance.
-     *
-     * @param Mustache_Loader $loader
-     */
-    public function setLoader(\Mustache_Loader $loader)
-    {
-        $this->loader = $loader;
-    }
-
-    /**
-     * Get the current Mustache template Loader instance.
-     *
-     * If no Loader instance has been explicitly specified, this method will instantiate and return
-     * a StringLoader instance.
-     *
-     * @return Mustache_Loader
-     */
-    public function getLoader()
-    {
-        if (!isset($this->loader)) {
-            $this->loader = new \Mustache_Loader_StringLoader();
-        }
-
-        return $this->loader;
-    }
-
-    /**
-     * Set the Mustache partials Loader instance.
-     *
-     * @param Mustache_Loader $partialsLoader
-     */
-    public function setPartialsLoader(\Mustache_Loader $partialsLoader)
-    {
-        $this->partialsLoader = $partialsLoader;
-    }
-
-    /**
      * Get the current Mustache partials Loader instance.
      *
      * If no Loader instance has been explicitly specified, this method will instantiate and return
@@ -317,23 +589,56 @@ class Engine extends \Mustache_Engine
     }
 
     /**
-     * Set partials for the current partials Loader instance.
+     * Set the Mustache partials Loader instance.
      *
-     * @throws Mustache_Exception_RuntimeException If the current Loader instance is immutable
-     *
-     * @param array $partials (core: array())
+     * @param Mustache_Loader $partialsLoader
      */
-    public function setPartials(array $partials = array())
+    public function setPartialsLoader(\Mustache_Loader $partialsLoader)
     {
-        if (!isset($this->partialsLoader)) {
-            $this->partialsLoader = new \Mustache_Loader_ArrayLoader();
+        $this->partialsLoader = $partialsLoader;
+    }
+
+    /**
+     * Add a new Mustache helper.
+     *
+     * @param string $name
+     * @param mixed $helper
+     * @see Mustache_Engine::setHelpers
+     *
+     */
+    public function addHelper($name, $helper)
+    {
+        $this->getHelpers()->add($name, $helper);
+    }
+
+    /**
+     * Get a Mustache helper by name.
+     *
+     * @param string $name
+     *
+     * @return mixed Helper
+     * @see Mustache_Engine::setHelpers
+     *
+     */
+    public function getHelper($name)
+    {
+        return $this->getHelpers()->get($name);
+    }
+
+    /**
+     * Get the current set of Mustache helpers.
+     *
+     * @return Mustache_HelperCollection
+     * @see Mustache_Engine::setHelpers
+     *
+     */
+    public function getHelpers()
+    {
+        if (!isset($this->helpers)) {
+            $this->helpers = new \Mustache_HelperCollection();
         }
 
-        if (!$this->partialsLoader instanceof \Mustache_Loader_MutableLoader) {
-            throw new \Mustache_Exception_RuntimeException('Unable to set partials on an immutable Mustache Loader instance');
-        }
-
-        $this->partialsLoader->setTemplates($partials);
+        return $this->helpers;
     }
 
     /**
@@ -343,9 +648,9 @@ class Engine extends \Mustache_Engine
      * any other valid Mustache context value. They will be prepended to the context stack, so they will be available in
      * any template loaded by this Mustache instance.
      *
+     * @param array|Traversable $helpers
      * @throws Mustache_Exception_InvalidArgumentException if $helpers is not an array or Traversable
      *
-     * @param array|Traversable $helpers
      */
     public function setHelpers($helpers)
     {
@@ -361,56 +666,13 @@ class Engine extends \Mustache_Engine
     }
 
     /**
-     * Get the current set of Mustache helpers.
-     *
-     * @see Mustache_Engine::setHelpers
-     *
-     * @return Mustache_HelperCollection
-     */
-    public function getHelpers()
-    {
-        if (!isset($this->helpers)) {
-            $this->helpers = new \Mustache_HelperCollection();
-        }
-
-        return $this->helpers;
-    }
-
-    /**
-     * Add a new Mustache helper.
-     *
-     * @see Mustache_Engine::setHelpers
-     *
-     * @param string $name
-     * @param mixed  $helper
-     */
-    public function addHelper($name, $helper)
-    {
-        $this->getHelpers()->add($name, $helper);
-    }
-
-    /**
-     * Get a Mustache helper by name.
-     *
-     * @see Mustache_Engine::setHelpers
-     *
-     * @param string $name
-     *
-     * @return mixed Helper
-     */
-    public function getHelper($name)
-    {
-        return $this->getHelpers()->get($name);
-    }
-
-    /**
      * Check whether this Mustache instance has a helper.
-     *
-     * @see Mustache_Engine::setHelpers
      *
      * @param string $name
      *
      * @return bool True if the helper is present
+     * @see Mustache_Engine::setHelpers
+     *
      */
     public function hasHelper($name)
     {
@@ -420,33 +682,13 @@ class Engine extends \Mustache_Engine
     /**
      * Remove a helper by name.
      *
+     * @param string $name
      * @see Mustache_Engine::setHelpers
      *
-     * @param string $name
      */
     public function removeHelper($name)
     {
         $this->getHelpers()->remove($name);
-    }
-
-    /**
-     * Set the Mustache Logger instance.
-     *
-     * @throws Mustache_Exception_InvalidArgumentException If logger is not an instance of Mustache_Logger or Psr\Log\LoggerInterface
-     *
-     * @param Mustache_Logger|Psr\Log\LoggerInterface $logger
-     */
-    public function setLogger($logger = null)
-    {
-        if ($logger !== null && !($logger instanceof \Mustache_Logger || is_a($logger, 'Psr\\Log\\LoggerInterface'))) {
-            throw new \Mustache_Exception_InvalidArgumentException('Expected an instance of Mustache_Logger or Psr\\Log\\LoggerInterface.');
-        }
-
-        if ($this->getCache()->getLogger() === null) {
-            $this->getCache()->setLogger($logger);
-        }
-
-        $this->logger = $logger;
     }
 
     /**
@@ -460,166 +702,23 @@ class Engine extends \Mustache_Engine
     }
 
     /**
-     * Set the Mustache Tokenizer instance.
+     * Set the Mustache Logger instance.
      *
-     * @param Mustache_Tokenizer $tokenizer
+     * @param Mustache_Logger|Psr\Log\LoggerInterface $logger
+     * @throws Mustache_Exception_InvalidArgumentException If logger is not an instance of Mustache_Logger or Psr\Log\LoggerInterface
+     *
      */
-    public function setTokenizer(\Mustache_Tokenizer $tokenizer)
+    public function setLogger($logger = null)
     {
-        $this->tokenizer = $tokenizer;
-    }
-
-    /**
-     * Get the current Mustache Tokenizer instance.
-     *
-     * If no Tokenizer instance has been explicitly specified, this method will instantiate and return a new one.
-     *
-     * @return Mustache_Tokenizer
-     */
-    public function getTokenizer()
-    {
-        if (!isset($this->tokenizer)) {
-            $this->tokenizer = new \Mustache_Tokenizer();
+        if ($logger !== null && !($logger instanceof \Mustache_Logger || is_a($logger, 'Psr\\Log\\LoggerInterface'))) {
+            throw new \Mustache_Exception_InvalidArgumentException('Expected an instance of Mustache_Logger or Psr\\Log\\LoggerInterface.');
         }
 
-        return $this->tokenizer;
-    }
-
-    /**
-     * Set the Mustache Parser instance.
-     *
-     * @param Mustache_Parser $parser
-     */
-    public function setParser(\Mustache_Parser $parser)
-    {
-        $this->parser = $parser;
-    }
-
-    /**
-     * Get the current Mustache Parser instance.
-     *
-     * If no Parser instance has been explicitly specified, this method will instantiate and return a new one.
-     *
-     * @return Mustache_Parser
-     */
-    public function getParser()
-    {
-        if (!isset($this->parser)) {
-            $this->parser = new \Mustache_Parser();
+        if ($this->getCache()->getLogger() === null) {
+            $this->getCache()->setLogger($logger);
         }
 
-        return $this->parser;
-    }
-
-    /**
-     * Set the Mustache Compiler instance.
-     *
-     * @param Mustache_Compiler $compiler
-     */
-    public function setCompiler(\Mustache_Compiler $compiler)
-    {
-        $this->compiler = $compiler;
-    }
-
-    /**
-     * Get the current Mustache Compiler instance.
-     *
-     * If no Compiler instance has been explicitly specified, this method will instantiate and return a new one.
-     *
-     * @return Mustache_Compiler
-     */
-    public function getCompiler()
-    {
-        if (!isset($this->compiler)) {
-            $this->compiler = new \Mustache_Compiler();
-        }
-
-        return $this->compiler;
-    }
-
-    /**
-     * Set the Mustache Cache instance.
-     *
-     * @param Mustache_Cache $cache
-     */
-    public function setCache(\Mustache_Cache $cache)
-    {
-        if (isset($this->logger) && $cache->getLogger() === null) {
-            $cache->setLogger($this->getLogger());
-        }
-
-        $this->cache = $cache;
-    }
-
-    /**
-     * Get the current Mustache Cache instance.
-     *
-     * If no Cache instance has been explicitly specified, this method will instantiate and return a new one.
-     *
-     * @return Mustache_Cache
-     */
-    public function getCache()
-    {
-        if (!isset($this->cache)) {
-            $this->setCache(new \Mustache_Cache_NoopCache());
-        }
-
-        return $this->cache;
-    }
-
-    /**
-     * Get the current Lambda Cache instance.
-     *
-     * If 'cache_lambda_templates' is enabled, this is the core cache instance. Otherwise, it is a NoopCache.
-     *
-     * @see Mustache_Engine::getCache
-     *
-     * @return Mustache_Cache
-     */
-    protected function getLambdaCache()
-    {
-        if ($this->cacheLambdaTemplates) {
-            return $this->getCache();
-        }
-
-        if (!isset($this->lambdaCache)) {
-            $this->lambdaCache = new \Mustache_Cache_NoopCache();
-        }
-
-        return $this->lambdaCache;
-    }
-
-    /**
-     * Helper method to generate a Mustache template class.
-     *
-     * @param string $source
-     *
-     * @return string Mustache Template class name
-     */
-    public function getTemplateClassName($source)
-    {
-        return $this->templateClassPrefix . md5(sprintf(
-                'version:%s,escape:%s,entity_flags:%i,charset:%s,strict_callables:%s,pragmas:%s,source:%s',
-                self::VERSION,
-                isset($this->escape) ? 'custom' : 'core',
-                $this->entityFlags,
-                $this->charset,
-                $this->strictCallables ? 'true' : 'false',
-                implode(' ', $this->getPragmas()),
-                $source
-            ));
-    }
-
-    /**
-     * Load a Mustache Template by name.
-     *
-     * @param string $name
-     *
-     * @return Mustache_Template
-     */
-    public function loadTemplate($name)
-    {
-        return $this->loadSource($this->getLoader()->load($name));
+        $this->logger = $logger;
     }
 
     /**
@@ -675,122 +774,24 @@ class Engine extends \Mustache_Engine
     }
 
     /**
-     * Instantiate and return a Mustache Template instance by source.
+     * Get the current Lambda Cache instance.
      *
-     * Optionally provide a Mustache_Cache instance. This is used internally by Mustache_Engine::loadLambda to respect
-     * the 'cache_lambda_templates' configuration option.
+     * If 'cache_lambda_templates' is enabled, this is the core cache instance. Otherwise, it is a NoopCache.
      *
-     * @see Mustache_Engine::loadTemplate
-     * @see Mustache_Engine::loadPartial
-     * @see Mustache_Engine::loadLambda
+     * @return Mustache_Cache
+     * @see Mustache_Engine::getCache
      *
-     * @param string         $source
-     * @param Mustache_Cache $cache  (core: null)
-     *
-     * @return Mustache_Template
      */
-    private function loadSource($source, \Mustache_Cache $cache = null)
+    protected function getLambdaCache()
     {
-        $source = str_replace(
-            '[]',
-            '.'.Di::getDefault()->get('configuration')->getLanguageShort(),
-            $source
-        );
-
-        $className = $this->getTemplateClassName($source);
-
-        if (!isset($this->templates[$className])) {
-            if ($cache === null) {
-                $cache = $this->getCache();
-            }
-
-            if (!class_exists($className, false)) {
-                if (!$cache->load($className)) {
-                    $compiled = $this->compile($source);
-                    $cache->cache($className, $compiled);
-                }
-            }
-
-            $this->log(
-                \Mustache_Logger::DEBUG,
-                'Instantiating template: "{className}"',
-                array('className' => $className)
-            );
-
-            $this->templates[$className] = new $className($this);
+        if ($this->cacheLambdaTemplates) {
+            return $this->getCache();
         }
 
-        return $this->templates[$className];
-    }
-
-    /**
-     * Helper method to tokenize a Mustache template.
-     *
-     * @see Mustache_Tokenizer::scan
-     *
-     * @param string $source
-     *
-     * @return array Tokens
-     */
-    private function tokenize($source)
-    {
-        return $this->getTokenizer()->scan($source);
-    }
-
-    /**
-     * Helper method to parse a Mustache template.
-     *
-     * @see Mustache_Parser::parse
-     *
-     * @param string $source
-     *
-     * @return array Token tree
-     */
-    private function parse($source)
-    {
-        $parser = $this->getParser();
-        $parser->setPragmas($this->getPragmas());
-
-        return $parser->parse($this->tokenize($source));
-    }
-
-    /**
-     * Helper method to compile a Mustache template.
-     *
-     * @see Mustache_Compiler::compile
-     *
-     * @param string $source
-     *
-     * @return string generated Mustache template class code
-     */
-    private function compile($source)
-    {
-        $tree = $this->parse($source);
-        $name = $this->getTemplateClassName($source);
-
-        $this->log(
-            \Mustache_Logger::INFO,
-            'Compiling template to "{className}" class',
-            array('className' => $name)
-        );
-
-        $compiler = $this->getCompiler();
-        $compiler->setPragmas($this->getPragmas());
-
-        return $compiler->compile($source, $tree, $name, isset($this->escape), $this->charset, $this->strictCallables, $this->entityFlags);
-    }
-
-    /**
-     * Add a log record if logging is enabled.
-     *
-     * @param int    $level   The logging level
-     * @param string $message The log message
-     * @param array  $context The log context
-     */
-    private function log($level, $message, array $context = array())
-    {
-        if (isset($this->logger)) {
-            $this->logger->log($level, $message, $context);
+        if (!isset($this->lambdaCache)) {
+            $this->lambdaCache = new \Mustache_Cache_NoopCache();
         }
+
+        return $this->lambdaCache;
     }
 }
