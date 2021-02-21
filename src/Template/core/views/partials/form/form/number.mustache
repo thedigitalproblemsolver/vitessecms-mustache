@@ -2,7 +2,6 @@
     <div class="input-group">
     {{> form/form/_flag_addon}}
 {{/short}}
-
 <input
     id="{{elementId}}{{#short}}_{{short}}{{/short}}"
     class="form-control{{#short}} {{short}}{{/short}}{{#attributes.inputClass}} {{attributes.inputClass}}{{/attributes.inputClass}}"
@@ -18,6 +17,9 @@
     {{#attributes.max}}
         max="{{attributes.max}}"
     {{/attributes.max}}
+    {{#attributes.step}}
+        step="{{attributes.step}}"
+    {{/attributes.step}}
 />
 {{#short}}
     </div>
