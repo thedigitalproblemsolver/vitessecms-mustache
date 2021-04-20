@@ -11,6 +11,9 @@ namespace VitesseCms\Mustache;
  * file that was distributed with this source code.
  */
 
+use Mustache_Exception_RuntimeException;
+use Mustache_Exception_UnknownTemplateException;
+use Mustache_Loader;
 use Phalcon\Di;
 
 /**
@@ -28,7 +31,7 @@ use Phalcon\Di;
  *          'partials_loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__).'/Views/partials'),
  *     ));
  */
-class Loader_FilesystemLoader implements \Mustache_Loader
+class Loader_FilesystemLoader implements Mustache_Loader
 {
     /**
      * @var string
@@ -75,7 +78,7 @@ class Loader_FilesystemLoader implements \Mustache_Loader
         }
 
         if ($this->shouldCheckPath() && !is_dir($this->baseDir)) {
-            throw new \Mustache_Exception_RuntimeException(sprintf('FilesystemLoader baseDir must be a directory: %s', $baseDir));
+            throw new Mustache_Exception_RuntimeException(sprintf('FilesystemLoader baseDir must be a directory: %s', $baseDir));
         }
 
         if (array_key_exists('extension', $options)) {
@@ -144,7 +147,7 @@ class Loader_FilesystemLoader implements \Mustache_Loader
         $fileName = $this->getFileName($name);
 
         if ($this->shouldCheckPath() && !file_exists($fileName)) {
-            throw new \Mustache_Exception_UnknownTemplateException($name);
+            throw new Mustache_Exception_UnknownTemplateException($name);
         }
 
         return file_get_contents($fileName);
