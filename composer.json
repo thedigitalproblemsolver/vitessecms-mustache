@@ -19,7 +19,7 @@
   },
   "require": {
     "vitessecms/sef": "~0.2.0",
-    "vitessecms/core": "~0.2.3",
+    "vitessecms/core": "~0.2.5",
     "mustache/mustache": "^2.11"
   }
 }
