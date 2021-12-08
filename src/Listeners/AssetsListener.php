@@ -26,6 +26,7 @@ class AssetsListener
     public function load(Event $event, AssetsService $assetsService): void
     {
         if ($this->isAdmin) :
+            $assetsService->loadJqueryUI();
             $assetsService->addInlineJs(
                 file_get_contents($this->vendorBaseDir . 'mustache/src/Resources/js/jquery.grideditor.js')
             );
