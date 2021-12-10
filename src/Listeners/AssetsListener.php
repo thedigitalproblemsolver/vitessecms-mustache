@@ -27,8 +27,12 @@ class AssetsListener
     {
         if ($this->isAdmin) :
             $assetsService->loadJqueryUI();
+            $assetsService->loadSummerNote();
             $assetsService->addInlineJs(
                 file_get_contents($this->vendorBaseDir . 'mustache/src/Resources/js/jquery.grideditor.js')
+            );
+            $assetsService->addInlineJs(
+                file_get_contents($this->vendorBaseDir . 'mustache/src/Resources/js/jquery.grideditor.summernote.js')
             );
             $assetsService->addInlineCss(
                 file_get_contents($this->vendorBaseDir . 'mustache/src/Resources/css/grideditor.css')

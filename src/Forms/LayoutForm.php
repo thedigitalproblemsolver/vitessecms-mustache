@@ -16,7 +16,7 @@ class LayoutForm extends AbstractForm
             (new Attributes())->setRequired()->setMultilang()
         )
             ->addHidden('html')
-            ->addHtml('<div id="layout_editor"></div>')
+            ->addHtml('<div id="layout_editor">'.($item?$item->getHtml():'').'</div>')
             ->addSubmitButton('Opslaan', (new Attributes())->setElementId('layout_editor_button_save'))
         ;
     }

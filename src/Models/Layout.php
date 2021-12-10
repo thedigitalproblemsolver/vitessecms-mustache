@@ -13,7 +13,7 @@ class Layout extends AbstractCollection
 
     public function getHtml(): string
     {
-        return $this->html;
+        return (string)$this->html;
     }
 }
 
