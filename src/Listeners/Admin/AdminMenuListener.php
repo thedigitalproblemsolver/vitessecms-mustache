@@ -12,8 +12,8 @@ class AdminMenuListener
     {
         $children = new AdminMenuNavBarChildren();
         $children->addChild(
-            'Grid layout',
-            'admin/mustache/adminlayout/index'
+            'Layouts',
+            'admin/mustache/adminlayout/adminList'
         );
         $adminMenu->addDropdown('DataDesign', $children);
     }
