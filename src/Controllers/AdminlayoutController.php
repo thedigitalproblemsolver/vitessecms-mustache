@@ -9,8 +9,9 @@ use VitesseCms\Mustache\DTO\RenderTemplateDTO;
 use VitesseCms\Mustache\Enum\ViewEnum;
 use VitesseCms\Mustache\Forms\LayoutForm;
 use VitesseCms\Mustache\Models\Layout;
+use VitesseCms\Mustache\Repositories\AdminRepositoriesInterface;
 
-class AdminlayoutController extends AbstractAdminController
+class AdminlayoutController extends AbstractAdminController implements AdminRepositoriesInterface
 {
     public function onConstruct()
     {

@@ -15,6 +15,16 @@
                     if (contentArea.html() == self.initialContent) {
                         contentArea.html('');
                     }
+                    $('.ge-rte-active.active').each(function(e){
+                        var contentArea = $(this);
+                        contentArea.summernote('destroy');
+                        contentArea
+                            .removeClass('active')
+                            .removeAttr('id')
+                            .removeAttr('style')
+                            .removeAttr('spellcheck')
+                        ;
+                    });
                     contentArea.addClass('active');
 
                     var configuration = $.extend(

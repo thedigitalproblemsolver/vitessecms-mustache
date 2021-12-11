@@ -22,6 +22,11 @@
     "vitessecms/core": "~0.2.15",
     "vitessecms/admin": "~0.2.8",
     "vitessecms/cli": "~0.2.3",
+    "vitessecms/form": "~0.2.7",
+    "vitessecms/database": "~0.2.4",
+    "vitessecms/block": "~0.2.15",
+    "vitessecms/datagroup": "~0.2.10",
+    "vitessecms/datafield": "~0.2.12",
     "mustache/mustache": "^2.11"
   }
 }

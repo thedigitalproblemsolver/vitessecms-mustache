@@ -11,9 +11,29 @@ class Layout extends AbstractCollection
      */
     public $html;
 
+    /**
+     * @var string
+     */
+    public $datagroup;
+
+    /**
+     * @var string
+     */
+    public $block;
+
     public function getHtml(): string
     {
         return (string)$this->html;
+    }
+
+    public function getDatagroup(): ?string
+    {
+        return $this->datagroup;
+    }
+
+    public function getBlock(): ?string
+    {
+        return $this->block;
     }
 }
 
