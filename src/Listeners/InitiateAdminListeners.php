@@ -11,6 +11,7 @@ use VitesseCms\Mustache\Enum\ViewEnum;
 use VitesseCms\Mustache\Listeners\Admin\AdminMenuListener;
 use VitesseCms\Mustache\Listeners\Admin\AssetsListener;
 use VitesseCms\Mustache\Listeners\Controllers\AdminlayoutControllerListener;
+use VitesseCms\Mustache\Repositories\LayoutRepository;
 
 class InitiateAdminListeners implements InitiateListenersInterface
 {
@@ -19,8 +20,8 @@ class InitiateAdminListeners implements InitiateListenersInterface
         $di->eventsManager->attach('adminMenu', new AdminMenuListener());
         $di->eventsManager->attach(AdminlayoutController::class, new AdminlayoutControllerListener());
         $di->eventsManager->attach(
-            ViewEnum::RENDER_TEMPLATE_EVENT,
-            new ViewListener($di->view, $di->configuration->getVendorNameDir())
+            ViewEnum::VIEW_LISTENER,
+            new ViewListener($di->view, $di->configuration->getVendorNameDir(), new LayoutRepository())
         );
         $di->eventsManager->attach(
             MediaEnum::ASSETS_LISTENER,

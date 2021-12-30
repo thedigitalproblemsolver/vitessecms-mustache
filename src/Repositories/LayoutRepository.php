@@ -9,6 +9,19 @@ use VitesseCms\Mustache\Models\LayoutIterator;
 
 class LayoutRepository
 {
+    public function getById(string $id, bool $hideUnpublished = true): ?Layout
+    {
+        Layout::setFindPublished($hideUnpublished);
+
+        /** @var Layout $layout */
+        $layout = Layout::findById($id);
+        if (is_object($layout)):
+            return $layout;
+        endif;
+
+        return null;
+    }
+
     public function findAll(
         ?FindValueIterator $findValues = null,
         bool $hideUnpublished = true

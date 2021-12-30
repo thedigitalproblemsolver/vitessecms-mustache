@@ -16,7 +16,7 @@ var initGridUI = function() {
         });
         $('#layout_editor_fields a').on('click', function(e){
             e.preventDefault();
-            $('.note-editable').append('[FIELD_'+$(this).attr('id')+']<br />');
+            $('.note-editable').append('{DATAFIELD;'+$(this).attr('id')+'}<br />');
         });
         $('#layout_editor_button_save').on('mouseover', function (e) {
             $('#html').val(layoutEditor.gridEditor('getHtml'));

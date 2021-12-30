@@ -6,6 +6,7 @@ use Phalcon\Events\Event;
 use Phalcon\Mvc\View;
 use VitesseCms\Core\Services\ViewService;
 use VitesseCms\Mustache\DTO\RenderTemplateDTO;
+use VitesseCms\Mustache\Repositories\LayoutRepository;
 
 class ViewListener
 {
@@ -19,10 +20,20 @@ class ViewListener
      */
     private $baseDir;
 
-    public function __construct(ViewService $viewService, string $baseDir)
+    /**
+     * @var LayoutRepository
+     */
+    private $layoutRepository;
+
+    public function __construct(
+        ViewService $viewService,
+        string $baseDir,
+        LayoutRepository $layoutRepository
+    )
     {
         $this->viewService = $viewService;
         $this->baseDir = $baseDir;
+        $this->layoutRepository = $layoutRepository;
     }
 
     public function renderTemplate( Event $event, RenderTemplateDTO $renderTemplateDTO): string
@@ -37,5 +48,10 @@ class ViewListener
         $this->viewService->setRenderLevel(View::LEVEL_MAIN_LAYOUT);
 
         return $return;
+    }
+
+    public function renderLayout(Event $event, string $layoutId): string
+    {
+        return $this->layoutRepository->getById($layoutId)->getHtml();
     }
 }
