@@ -1,11 +1,7 @@
 <section>
     <article class="row" >
         <div class="col-12 col-sm-12 col-md-6 col-lg-7 text-center">
-            <img
-                class="img-fluid image-add-zoom"
-                src="/uploads/{{ACCOUNT}}/{{currentItem.image}}?h=500"
-                alt="{{currentItem.name[]}}"
-            />
+            {{> fields/image/single_image_zoom}}
         </div>
         <div class="col-12 col-sm-12 col-md-6 col-lg-5">
             {{> fields/text/header }}
