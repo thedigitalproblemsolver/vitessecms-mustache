@@ -16,11 +16,6 @@ class Layout extends AbstractCollection
      */
     public $datagroup;
 
-    /**
-     * @var string
-     */
-    public $blockposition;
-
     public function getHtml(): string
     {
         return (string)$this->html;
@@ -29,11 +24,6 @@ class Layout extends AbstractCollection
     public function getDatagroup(): ?string
     {
         return $this->datagroup;
-    }
-
-    public function getBlockPosition(): ?string
-    {
-        return $this->blockposition;
     }
 }
 
