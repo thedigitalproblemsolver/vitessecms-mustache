@@ -33,7 +33,7 @@ class LayoutForm extends AbstractFormWithRepository
             ->addDropdown('%MUSTACHE_DATAGROUP%','datagroup',(new Attributes())->setRequired()->setOptions(
                 ElementHelper::modelIteratorToOptions($this->repositories->datagroup->findAll())
             ))
-            ->addDropdown('%MUSTACHE_BLOCK%','blockposition',(new Attributes())->setRequired()->setOptions(
+            ->addDropdown('%MUSTACHE_BLOCK_POSITION%','blockposition',(new Attributes())->setRequired()->setOptions(
                 ElementHelper::modelIteratorToOptions($this->repositories->blockposition->findAllWithOneDatagroup())
             ))
             ->addHidden('html')
