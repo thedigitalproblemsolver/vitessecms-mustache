@@ -21,7 +21,13 @@ class InitiateAdminListeners implements InitiateListenersInterface
         $di->eventsManager->attach(AdminlayoutController::class, new AdminlayoutControllerListener());
         $di->eventsManager->attach(
             ViewEnum::VIEW_LISTENER,
-            new ViewListener($di->view, $di->configuration->getVendorNameDir(), new LayoutRepository())
+            new ViewListener(
+                $di->view,
+                $di->configuration->getVendorNameDir(),
+                $di->configuration->getTemplateDir(),
+                $di->configuration->getCoreTemplateDir(),
+                new LayoutRepository()
+            )
         );
         $di->eventsManager->attach(
             MediaEnum::ASSETS_LISTENER,

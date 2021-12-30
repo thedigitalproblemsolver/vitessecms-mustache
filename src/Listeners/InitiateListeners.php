@@ -16,7 +16,12 @@ class InitiateListeners  implements InitiateListenersInterface
     {
         $di->eventsManager->attach(
             ViewEnum::VIEW_LISTENER,
-            new ViewListener($di->view, $di->configuration->getVendorNameDir(), new LayoutRepository()),
+            new ViewListener(
+                $di->view,
+                $di->configuration->getVendorNameDir(),
+                $di->configuration->getTemplateDir(),
+                $di->configuration->getCoreTemplateDir(),
+                new LayoutRepository()),
         );
 
         if($di->user->hasAdminAccess()):
