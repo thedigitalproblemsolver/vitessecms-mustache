@@ -2,7 +2,7 @@
 
 namespace VitesseCms\Mustache\Repositories;
 
-use VitesseCms\Block\Repositories\BlockRepository;
+use VitesseCms\Block\Repositories\BlockPositionRepository;
 use VitesseCms\Database\Interfaces\BaseRepositoriesInterface;
 use VitesseCms\Datafield\Repositories\DatafieldRepository;
 use VitesseCms\Datagroup\Repositories\DatagroupRepository;
@@ -15,9 +15,9 @@ class AdminRepositoryCollection implements BaseRepositoriesInterface
     public $datagroup;
 
     /**
-     * @var BlockRepository
+     * @var BlockPositionRepository
      */
-    public $block;
+    public $blockposition;
 
     /**
      * @var DatafieldRepository
@@ -26,12 +26,12 @@ class AdminRepositoryCollection implements BaseRepositoriesInterface
 
     public function __construct(
         DatagroupRepository $datagroupRepository,
-        BlockRepository $blockRepository,
+        BlockPositionRepository $blockRepository,
         DatafieldRepository $datafieldRepository
     )
     {
         $this->datagroup = $datagroupRepository;
-        $this->block = $blockRepository;
+        $this->blockposition = $blockRepository;
         $this->datafield = $datafieldRepository;
     }
 }

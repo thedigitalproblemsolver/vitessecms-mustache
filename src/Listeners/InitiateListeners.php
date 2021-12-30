@@ -6,6 +6,7 @@ use VitesseCms\Admin\Utils\AdminUtil;
 use VitesseCms\Core\Interfaces\InitiateListenersInterface;
 use VitesseCms\Core\Interfaces\InjectableInterface;
 use VitesseCms\Mustache\Listeners\Admin\AdminMenuListener;
+use VitesseCms\Mustache\Listeners\Admin\AssetsListener;
 
 class InitiateListeners  implements InitiateListenersInterface
 {
@@ -13,10 +14,6 @@ class InitiateListeners  implements InitiateListenersInterface
     {
         if($di->user->hasAdminAccess()):
             $di->eventsManager->attach('adminMenu', new AdminMenuListener());
-            $di->eventsManager->attach('assets', new AssetsListener(
-                $di->configuration->getVendorNameDir(),
-                AdminUtil::isAdminPage()
-            ));
         endif;
     }
 }

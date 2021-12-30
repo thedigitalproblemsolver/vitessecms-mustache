@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace VitesseCms\Mustache\Controllers;
 
-use VitesseCms\Admin\AbstractAdminController;
+use Phalcon\Events\Event;
+use VitesseCms\Admin\AbstractAdminEventController;
 use VitesseCms\Database\AbstractCollection;
 use VitesseCms\Form\AbstractForm;
 use VitesseCms\Mustache\DTO\RenderTemplateDTO;
@@ -11,7 +12,7 @@ use VitesseCms\Mustache\Forms\LayoutForm;
 use VitesseCms\Mustache\Models\Layout;
 use VitesseCms\Mustache\Repositories\AdminRepositoriesInterface;
 
-class AdminlayoutController extends AbstractAdminController implements AdminRepositoriesInterface
+class AdminlayoutController extends AbstractAdminEventController implements AdminRepositoriesInterface
 {
     public function onConstruct()
     {
@@ -28,6 +29,7 @@ class AdminlayoutController extends AbstractAdminController implements AdminRepo
         AbstractForm $form = null
     ): void
     {
+        $this->assets->setEventLoader(ViewEnum::ASSETS_LOAD_GRID_EDITOR);
         parent::editAction($itemId, $template, $formTemplatePath, $form);
     }
 }

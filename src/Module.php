@@ -3,7 +3,7 @@
 namespace VitesseCms\Mustache;
 
 use VitesseCms\Admin\Utils\AdminUtil;
-use VitesseCms\Block\Repositories\BlockRepository;
+use VitesseCms\Mustache\Repositories\BlockPositionRepository;
 use VitesseCms\Core\AbstractModule;
 use Phalcon\DiInterface;
 use VitesseCms\Datafield\Repositories\DatafieldRepository;
@@ -18,7 +18,7 @@ class Module extends AbstractModule
         if (AdminUtil::isAdminPage()) :
             $di->setShared('repositories', new AdminRepositoryCollection(
                 new DatagroupRepository(),
-                new BlockRepository(),
+                new BlockPositionRepository(),
                 new DatafieldRepository()
             ));
         endif;
