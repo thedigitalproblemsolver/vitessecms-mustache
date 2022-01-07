@@ -9,10 +9,12 @@ use VitesseCms\Mustache\Models\Layout;
 class AdminlayoutControllerListener
 {
     public function beforeEdit(Event $event, AdminlayoutController $controller, Layout $item){
-        $datagroup = $controller->repositories->datagroup->getById($item->getDatagroup());
-        $item->availableFields = [];
-        foreach( $datagroup->getDatafields() as $datafield) :
-            $item->availableFields[] = $controller->repositories->datafield->getById($datafield['id']);
-        endforeach;
+        if($item->getDatagroup() !== null):
+            $datagroup = $controller->repositories->datagroup->getById($item->getDatagroup());
+            $item->availableFields = [];
+            foreach( $datagroup->getDatafields() as $datafield) :
+                $item->availableFields[] = $controller->repositories->datafield->getById($datafield['id']);
+            endforeach;
+        endif;
     }
 }
