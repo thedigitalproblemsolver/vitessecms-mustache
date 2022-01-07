@@ -86,6 +86,11 @@ class ViewListener
 
     public function renderLayout(Event $event, string $layoutId): string
     {
-        return $this->layoutRepository->getById($layoutId)->getHtml();
+        $layout = $this->layoutRepository->getById($layoutId);
+        if($layout === null):
+            return '';
+        endif;
+
+        return $layout->getHtml();
     }
 }

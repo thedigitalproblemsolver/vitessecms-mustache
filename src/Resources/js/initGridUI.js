@@ -24,4 +24,4 @@ var initGridUI = function() {
     }
 };
 
-initAdmin.push(initGridUI);
+inits.push(initGridUI);
