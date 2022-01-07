@@ -1,18 +1,10 @@
 <section>
     <article class="row" >
         <div class="col-12 col-sm-12 col-md-6 col-lg-7 text-center">
-            <img
-                class="img-fluid image-add-zoom"
-                src="/uploads/{{ACCOUNT}}/{{currentItem.image}}?h=500"
-                alt="{{currentItem.name[]}}"
-            />
+            {{> fields/image/singleImageZoom}}
         </div>
         <div class="col-12 col-sm-12 col-md-6 col-lg-5">
-            <header>
-                <h1>
-                    {{currentItem.name[]}}
-                </h1>
-            </header>
+            {{> fields/text/header }}
             {{{currentItem.bodytext[]}}}
 
             {{#currentItem.outOfStock}}
@@ -35,14 +27,8 @@
             {{/currentItem.outOfStock}}
             {{^currentItem.outOfStock}}
                 <div class="d-md-flex justify-content-between align-items-center">
-                    <div class="container-product-price text-center text-lg-left">
-                        {{{SHOP_CURRENCY_BASE}}} {{currentItem.price_sale}}
-                    </div>
-                    <div class="container-addtocart">
-                        {{#currentItem.addtocart}}
-                            {{> shop/addToCart}}
-                        {{/currentItem.addtocart}}
-                    </div>
+                    {{> fields/shopprice/shopSalePrice}}
+                    {{> fields/shopaddtocart/shopAddToCart}}
                 </div>
             {{/currentItem.outOfStock}}
             {{#SHOP_TEXT_USP}}
