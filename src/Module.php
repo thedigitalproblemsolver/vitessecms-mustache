@@ -2,13 +2,28 @@
 
 namespace VitesseCms\Mustache;
 
+use VitesseCms\Admin\Utils\AdminUtil;
 use VitesseCms\Core\AbstractModule;
 use Phalcon\DiInterface;
+use VitesseCms\Database\Enums\DatabaseEnum;
+use VitesseCms\Datafield\Repositories\DatafieldRepository;
+use VitesseCms\Datagroup\Repositories\DatagroupRepository;
+use VitesseCms\Mustache\Enum\ViewEnum;
+use VitesseCms\Mustache\Repositories\AdminRepositoryCollection;
 
 class Module extends AbstractModule
 {
     public function registerServices(DiInterface $di, string $string = null)
     {
-        parent::registerServices($di, 'Mustache');
+        parent::registerServices($di, ViewEnum::MODULE);
+        if (AdminUtil::isAdminPage()) :
+            $di->setShared(
+                DatabaseEnum::REPOSITORIES,
+                new AdminRepositoryCollection(
+                    new DatagroupRepository(),
+                    new DatafieldRepository()
+                )
+            );
+        endif;
     }
 }

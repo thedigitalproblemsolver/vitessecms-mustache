@@ -2,7 +2,7 @@
 
 namespace VitesseCms\Mustache\DTO;
 
-class RenderTemplateDTO
+final class RenderTemplateDTO
 {
     /**
      * @var string
