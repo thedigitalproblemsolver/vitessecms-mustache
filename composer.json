@@ -19,12 +19,12 @@
   },
   "require": {
     "vitessecms/sef": "~0.2.1",
-    "vitessecms/core": "~0.2.19",
+    "vitessecms/core": "~0.2.20",
     "vitessecms/admin": "~0.2.9",
     "vitessecms/cli": "~0.2.4",
     "vitessecms/form": "~0.2.8",
     "vitessecms/database": "~0.2.5",
-    "vitessecms/block": "~0.2.16",
+    "vitessecms/block": "~0.2.17",
     "vitessecms/datagroup": "~0.2.10",
     "vitessecms/datafield": "~0.2.13",
     "mustache/mustache": "^2.11"
