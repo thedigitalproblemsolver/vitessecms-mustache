@@ -29,4 +29,9 @@ class AssetsListener
         $assetsService->addInlineJs(file_get_contents($this->vendorBaseDir . 'mustache/src/Resources/js/initGridUI.js'));
         $assetsService->addInlineCss(file_get_contents($this->vendorBaseDir . 'mustache/src/Resources/css/grideditor.css'));
     }
+
+    public function loadLazyLoading(Event $event, AssetsService $assetsService): void
+    {
+        $assetsService->loadLazyLoading();
+    }
 }
