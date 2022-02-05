@@ -3,6 +3,7 @@
 namespace VitesseCms\Mustache;
 
 use VitesseCms\Admin\Utils\AdminUtil;
+use VitesseCms\Block\Repositories\BlockRepository;
 use VitesseCms\Core\AbstractModule;
 use Phalcon\DiInterface;
 use VitesseCms\Database\Enums\DatabaseEnum;
@@ -21,7 +22,8 @@ class Module extends AbstractModule
                 DatabaseEnum::REPOSITORIES,
                 new AdminRepositoryCollection(
                     new DatagroupRepository(),
-                    new DatafieldRepository()
+                    new DatafieldRepository(),
+                    new BlockRepository()
                 )
             );
         endif;

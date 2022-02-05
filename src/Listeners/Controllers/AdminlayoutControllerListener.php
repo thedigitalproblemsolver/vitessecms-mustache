@@ -16,5 +16,7 @@ class AdminlayoutControllerListener
                 $item->availableFields[] = $controller->repositories->datafield->getById($datafield['id']);
             endforeach;
         endif;
+
+        $item->availableBlocks = $controller->repositories->block->findAll();
     }
 }

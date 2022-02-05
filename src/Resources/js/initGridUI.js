@@ -18,6 +18,10 @@ var initGridUI = function() {
             e.preventDefault();
             $('.note-editable').append('{DATAFIELD;'+$(this).attr('id')+'}<br />');
         });
+        $('#layout_editor_blocks a').on('click', function(e){
+            e.preventDefault();
+            $('.note-editable').append('{BLOCK;'+$(this).attr('id')+'}<br />');
+        });
         $('#layout_editor_button_save').on('mouseover', function (e) {
             $('#html').val(layoutEditor.gridEditor('getHtml'));
         });
