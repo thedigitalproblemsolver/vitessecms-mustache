@@ -24,7 +24,7 @@
     "vitessecms/cli": "~0.2.4",
     "vitessecms/form": "~0.2.8",
     "vitessecms/database": "~0.2.5",
-    "vitessecms/block": "~0.2.18",
+    "vitessecms/block": "~0.2.19",
     "vitessecms/datagroup": "~0.2.10",
     "vitessecms/datafield": "~0.2.13",
     "mustache/mustache": "^2.11"
