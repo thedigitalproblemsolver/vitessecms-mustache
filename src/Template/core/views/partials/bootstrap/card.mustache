@@ -43,10 +43,12 @@
             {{^block.hideIntroText}}
                 {{{introtext[]}}}
             {{/block.hideIntroText}}
+        </a>
+        <div class="card-footer">
             {{#block.readmoreShowPerItem}}
                 {{>  core/readmore}}
             {{/block.readmoreShowPerItem}}
-        </a>
+        </div>
     {{/block.imageFullWidth}}
     {{^block.imageFullWidth}}
         <div class="card-body">
@@ -58,6 +60,8 @@
             {{^block.hideIntroText}}
                 {{{introtext[]}}}
             {{/block.hideIntroText}}
+        </div>
+        <div class="card-footer">
             {{#block.readmoreShowPerItem}}
                 {{>  core/readmore}}
             {{/block.readmoreShowPerItem}}
