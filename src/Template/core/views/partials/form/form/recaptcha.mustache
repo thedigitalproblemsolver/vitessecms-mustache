@@ -1,0 +1,8 @@
+{{#GOOGLE_RECAPTCHA_KEY}}
+    <div
+        data-sitekey="{{GOOGLE_RECAPTCHA_KEY}}"
+        data-callback="parseRecaptcha"
+        class="g-recaptcha"
+    ></div>
+    <input type="hidden" class="recaptcha-token" name="recaptcha-token" value="" />
+{{/GOOGLE_RECAPTCHA_KEY}}
