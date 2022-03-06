@@ -6,6 +6,7 @@ use Mustache_Engine;
 use VitesseCms\Admin\Utils\AdminUtil;
 use VitesseCms\Core\Interfaces\InitiateListenersInterface;
 use VitesseCms\Core\Interfaces\InjectableInterface;
+use VitesseCms\Core\Utils\SystemUtil;
 use VitesseCms\Mustache\Enum\ViewEnum;
 use VitesseCms\Mustache\Listeners\Admin\AdminMenuListener;
 use VitesseCms\Mustache\Listeners\Admin\AssetsListener;
@@ -30,7 +31,8 @@ class InitiateListeners  implements InitiateListenersInterface
                     $di->configuration->getAccountTemplateDir(),
                     $di->configuration->getTemplateDir(),
                     $di->configuration->getCoreTemplateDir()
-                )
+                ),
+                SystemUtil::getModules($di->configuration)
             )
         );
 
