@@ -40,4 +40,9 @@ final class RenderTemplateDTO
     {
         return $this->params;
     }
+
+    public function setTemplatePath(string $templatePath): void
+    {
+        $this->templatePath = $templatePath;
+    }
 }

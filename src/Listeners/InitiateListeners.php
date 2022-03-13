@@ -2,13 +2,16 @@
 
 namespace VitesseCms\Mustache\Listeners;
 
+use Mustache_Engine;
 use VitesseCms\Admin\Utils\AdminUtil;
 use VitesseCms\Core\Interfaces\InitiateListenersInterface;
 use VitesseCms\Core\Interfaces\InjectableInterface;
+use VitesseCms\Core\Utils\SystemUtil;
 use VitesseCms\Mustache\Enum\ViewEnum;
 use VitesseCms\Mustache\Listeners\Admin\AdminMenuListener;
 use VitesseCms\Mustache\Listeners\Admin\AssetsListener;
 use VitesseCms\Mustache\Repositories\LayoutRepository;
+use VitesseCms\Mustache\Services\RenderService;
 
 class InitiateListeners  implements InitiateListenersInterface
 {
@@ -21,7 +24,16 @@ class InitiateListeners  implements InitiateListenersInterface
                 $di->configuration->getVendorNameDir(),
                 $di->configuration->getTemplateDir(),
                 $di->configuration->getCoreTemplateDir(),
-                new LayoutRepository()),
+                $di->configuration->getAccountTemplateDir(),
+                new LayoutRepository(),
+                new RenderService(
+                    new Mustache_Engine(),
+                    $di->configuration->getAccountTemplateDir(),
+                    $di->configuration->getTemplateDir(),
+                    $di->configuration->getCoreTemplateDir()
+                ),
+                SystemUtil::getModules($di->configuration)
+            )
         );
 
         if($di->user->hasAdminAccess()):

@@ -6,8 +6,10 @@ use Phalcon\Events\Event;
 use Phalcon\Mvc\View;
 use VitesseCms\Content\Models\Item;
 use VitesseCms\Core\Services\ViewService;
+use VitesseCms\Core\Utils\SystemUtil;
 use VitesseCms\Mustache\DTO\RenderTemplateDTO;
 use VitesseCms\Mustache\Repositories\LayoutRepository;
+use VitesseCms\Mustache\Services\RenderService;
 
 class ViewListener
 {
@@ -36,12 +38,30 @@ class ViewListener
      */
     private $templateDir;
 
+    /**
+     * @var string
+     */
+    private $accountTemplateDir;
+
+    /**
+     * @var RenderService
+     */
+    private $renderService;
+
+    /**
+     * @var array
+     */
+    private $modules;
+
     public function __construct(
         ViewService $viewService,
         string $baseDir,
         string $templateDir,
         string $coreTemplateDir,
-        LayoutRepository $layoutRepository
+        string $accountTemplateDir,
+        LayoutRepository $layoutRepository,
+        RenderService $renderService,
+        array $modules
     )
     {
         $this->viewService = $viewService;
@@ -49,6 +69,9 @@ class ViewListener
         $this->layoutRepository = $layoutRepository;
         $this->coreTemplateDir = $coreTemplateDir;
         $this->templateDir = $templateDir;
+        $this->accountTemplateDir = $accountTemplateDir;
+        $this->renderService = $renderService;
+        $this->modules = $modules;
     }
 
     public function renderTemplate( Event $event, RenderTemplateDTO $renderTemplateDTO, ?string $baseDir = null): string
@@ -56,11 +79,23 @@ class ViewListener
         $templatePath = $renderTemplateDTO->getTemplatePath();
         $template = $renderTemplateDTO->getTemplate();
         $params = $renderTemplateDTO->getParams();
+        $useRenderService = false;
 
-        $this->viewService->setRenderLevel(View::LEVEL_ACTION_VIEW);
-        $this->viewService->render(($baseDir??$this->baseDir).$templatePath, $template, $params);
-        $return = $this->viewService->getContent();
-        $this->viewService->setRenderLevel(View::LEVEL_MAIN_LAYOUT);
+        foreach($this->modules as $key => $moduleDir):
+            if(is_file($moduleDir.'/Template/'.$template.'.mustache')):
+                $renderTemplateDTO->setTemplatePath($moduleDir.'/Template/');
+                $useRenderService = true;
+            endif;
+        endforeach;
+
+        if($useRenderService || is_file($this->accountTemplateDir.$template.'.mustache')) :
+            $return = $this->renderService->render($renderTemplateDTO);
+        else:
+            $this->viewService->setRenderLevel(View::LEVEL_ACTION_VIEW);
+            $this->viewService->render(($baseDir??$this->baseDir).$templatePath, $template, $params);
+            $return = $this->viewService->getContent();
+            $this->viewService->setRenderLevel(View::LEVEL_MAIN_LAYOUT);
+        endif;
 
         return $return;
     }
