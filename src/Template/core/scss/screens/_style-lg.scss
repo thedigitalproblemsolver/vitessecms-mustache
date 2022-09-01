@@ -1,3 +1,12 @@
 @media (min-width: 992px) {
-
+  .text-column-count-lg-4 {
+    column-count: 4;
+    ul {
+      @extend .list-unstyled;
+      li {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+    }
+  }
 }

@@ -18,7 +18,30 @@ class Layout extends AbstractCollection
 
     public function getHtml(): string
     {
-        return (string)$this->html;
+        if($this->html === null) :
+            return '';
+        endif;
+
+        $search = [
+            'class="ge-content ge-content-type-summernote"',
+            'data-ge-content-type="summernote"',
+            '<p>{',
+            '}<br></p>',
+            '}<br>',
+            '<div  >',
+            ' style=""'
+        ];
+        $replace = [
+            '',
+            '',
+            '{',
+            '}',
+            '}',
+            '<div>',
+            ''
+        ];
+
+        return str_replace($search, $replace, $this->html);
     }
 
     public function getDatagroup(): ?string

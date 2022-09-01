@@ -2,6 +2,16 @@
     @include filter-md();
     @include menu-md($left-width);
     @include zoom-md();
+    .text-column-count-md-3 {
+        column-count: 3;
+        ul {
+            @extend .list-unstyled;
+            li {
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+        }
+    }
 
     .container-topbar {
         &.fixed-top {
@@ -22,7 +32,7 @@
             display:block;
         }
         .logo-mobile {
-          display:none;
+            display:none;
         }
     }
 
