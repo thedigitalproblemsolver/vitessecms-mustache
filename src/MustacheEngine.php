@@ -2,7 +2,7 @@
 
 namespace VitesseCms\Mustache;
 
-use Phalcon\DiInterface;
+use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\View\Engine\Mustache;
 use Phalcon\Mvc\ViewBaseInterface;
 
@@ -15,8 +15,8 @@ class MustacheEngine extends Mustache
 
     public function __construct(
         ViewBaseInterface $view,
-        Engine $mustacheEngine,
-        DiInterface $di = null
+        Engine            $mustacheEngine,
+        DiInterface       $di = null
     )
     {
         parent::__construct($view, $di);
