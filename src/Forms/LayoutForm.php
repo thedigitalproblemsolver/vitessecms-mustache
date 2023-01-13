@@ -13,16 +13,6 @@ use VitesseCms\Mustache\Repositories\AdminRepositoryInterface;
 
 class LayoutForm extends AbstractFormWithRepository
 {
-    /**
-     * @var AdminRepositoryInterface
-     */
-    protected $repositories;
-
-    /**
-     * @var Layout
-     */
-    protected $_entity;
-
     public function buildForm(): FormWithRepositoryInterface
     {
         $this->addText(
@@ -34,7 +24,7 @@ class LayoutForm extends AbstractFormWithRepository
                 ElementHelper::modelIteratorToOptions($this->repositories->datagroup->findAll())
             ))
             ->addHidden('html')
-            ->addHtml('<div id="layout_editor">'.($this->_entity?$this->_entity->getHtml():'').'</div>')
+            ->addHtml('<div id="layout_editor">'.($this->entity?$this->entity->getHtml():'').'</div>')
             ->addSubmitButton('Opslaan', (new Attributes())->setElementId('layout_editor_button_save'))
         ;
 

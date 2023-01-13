@@ -27,7 +27,7 @@ use Mustache_Loader_StringLoader;
 use Mustache_Logger;
 use Mustache_Parser;
 use Mustache_Tokenizer;
-use Phalcon\Di;
+use Phalcon\Di\Di;
 use Traversable;
 
 /**

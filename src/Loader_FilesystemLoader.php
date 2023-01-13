@@ -14,7 +14,7 @@ namespace VitesseCms\Mustache;
 use Mustache_Exception_RuntimeException;
 use Mustache_Exception_UnknownTemplateException;
 use Mustache_Loader;
-use Phalcon\Di;
+use Phalcon\Di\Di;
 
 /**
  * Mustache Template filesystem Loader implementation.

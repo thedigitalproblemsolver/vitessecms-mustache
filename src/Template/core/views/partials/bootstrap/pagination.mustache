@@ -1,39 +1,42 @@
 <nav aria-label="Page navigation">
-    {{#pagination.next}}
+    {{#pagination.getNext}}
         <ul class="pagination justify-content-end">
             <li class="page-item">
                 <div class="page-link">
-                    {{pagination.totalPages}} items
+                    {{pagination.getTotalPages}} items
                 </div>
             </li>
             <li class="page-item">
                 <a
                         class="page-link fa fa-fast-backward"
-                        href="{{pagination.slug}}"
+                        href="{{pagination.getSlug}}"
                         aria-label="Previous"
                 ></a>
             </li>
             <li class="page-item">
-            <a
-                    class="page-link  fa fa-step-backward"
-                    href="{{pagination.slug}}{{#pagination.before}}{{pagination.slugSeperator}}{{pagination.urlQueryKey}}={{pagination.before}}{{/pagination.before}}"
+                <a
+                        class="page-link  fa fa-step-backward"
+                        href="{{pagination.getSlug}}{{pagination.getSlugSeperator}}{{pagination.getUrlQueryKey}}={{pagination.getPrevious}}
+                "
                 aria-label="Previous"
                 ></a>
             </li>
             <li class="page-item">
                 <a
                         class="page-link fa fa-step-forward"
-                        href="{{pagination.slug}}{{pagination.slugSeperator}}{{pagination.urlQueryKey}}={{pagination.next}}"
+                        href="{{pagination.getSlug}}{{pagination.getSlugSeperator}}{{pagination.getUrlQueryKey}}={{pagination.getNext}}
+                "
                 aria-label="Next"
                 ></a>
             </li>
             <li class="page-item">
                 <a
                         class="page-link fa fa-fast-forward"
-                        href="{{pagination.slug}}{{pagination.slugSeperator}}{{pagination.urlQueryKey}}={{pagination.last}}"
+                        href="{{pagination.getSlug}}{{pagination.getSlugSeperator}}{{pagination.getUrlQueryKey}}={{pagination.getLast}}
+                "
                 aria-label="Next"
                 ></a>
             </li>
         </ul>
-    {{/pagination.next}}
+    {{/pagination.getNext}}
 </nav>
