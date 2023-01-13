@@ -5,7 +5,7 @@ namespace VitesseCms\Mustache;
 use VitesseCms\Admin\Utils\AdminUtil;
 use VitesseCms\Block\Repositories\BlockRepository;
 use VitesseCms\Core\AbstractModule;
-use Phalcon\DiInterface;
+use Phalcon\Di\DiInterface;
 use VitesseCms\Database\Enums\DatabaseEnum;
 use VitesseCms\Datafield\Repositories\DatafieldRepository;
 use VitesseCms\Datagroup\Repositories\DatagroupRepository;
