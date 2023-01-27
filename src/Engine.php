@@ -322,27 +322,6 @@ class Engine extends Mustache_Engine
     }
 
     /**
-     * Helper method to generate a Mustache template class.
-     *
-     * @param string $source
-     *
-     * @return string Mustache Template class name
-     */
-    public function getTemplateClassName($source)
-    {
-        return $this->templateClassPrefix . md5(sprintf(
-                'version:%s,escape:%s,entity_flags:%i,charset:%s,strict_callables:%s,pragmas:%s,source:%s',
-                self::VERSION,
-                isset($this->escape) ? 'custom' : 'core',
-                $this->entityFlags,
-                $this->charset,
-                $this->strictCallables ? 'true' : 'false',
-                implode(' ', $this->getPragmas()),
-                $source
-            ));
-    }
-
-    /**
      * Get the current globally enabled pragmas.
      *
      * @return array
