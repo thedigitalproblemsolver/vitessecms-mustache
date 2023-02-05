@@ -42,9 +42,9 @@ class RenderService
 
     public function render(RenderTemplateDTO $renderTemplateDTO): string
     {
-        $templatePath = $renderTemplateDTO->getTemplatePath();
-        $template = $renderTemplateDTO->getTemplate();
-        $params = $renderTemplateDTO->getParams();
+        $templatePath = $renderTemplateDTO->templatePath;
+        $template = $renderTemplateDTO->template;
+        $params = $renderTemplateDTO->params;
 
         if (is_file($templatePath . $template . '.mustache')) :
             return $this->mustacheEngine->render(file_get_contents($templatePath . $template . '.mustache'), $params);

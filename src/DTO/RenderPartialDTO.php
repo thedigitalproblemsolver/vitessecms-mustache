@@ -4,15 +4,12 @@ namespace VitesseCms\Mustache\DTO;
 
 final class RenderPartialDTO
 {
-    private string $partial;
+    readonly string $partial;
+    readonly array $params;
 
-    public function __construct(string $partial)
+    public function __construct(string $partial, array $params = [])
     {
         $this->partial = $partial;
-    }
-
-    public function getPartial(): string
-    {
-        return $this->partial;
+        $this->params = $params;
     }
 }
