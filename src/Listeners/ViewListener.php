@@ -129,7 +129,7 @@ class ViewListener
 
     public function renderLayout(Event $event, RenderLayoutDTO $layoutDTO): string
     {
-        $layout = $this->layoutRepository->getById($layoutDTO->getLayoutId());
+        $layout = $this->layoutRepository->getById($layoutDTO->layoutId);
         if ($layout === null):
             return '';
         endif;
