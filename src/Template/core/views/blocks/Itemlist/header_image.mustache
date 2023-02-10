@@ -1,38 +1,24 @@
 {{#block.items}}
-    {{#headerImage}}
     <div
         class="header-image"
-        style="background-image:url('/uploads/{{ACCOUNT}}/{{headerImage}}')"
+        style="background-image:url('{{image}}')"
     >
         <img
             class="hidden-xs-up d-none"
-            src="uploads/{{ACCOUNT}}/{{headerImage}}"
+            src="{{image}}"
             alt="name[]"
         />
     </div>
-    {{/headerImage}}
-    {{^headerImage}}
-        <div
-                class="header-image"
-                style="background-image:url('/uploads/{{ACCOUNT}}/{{HEADER_IMAGE_DEFAULT}}')"
-        >
-            <img
-                class="hidden-xs-up d-none"
-                src="uploads/{{ACCOUNT}}/{{HEADER_IMAGE_DEFAULT}}"
-                alt="name[]"
-            />
-        </div>
-    {{/headerImage}}
 {{/block.items}}
 {{^block.items}}
     <div
             class="header-image"
-            style="background-image:url('/uploads/{{ACCOUNT}}/{{HEADER_IMAGE_DEFAULT}}')"
+            style="background-image:url('{{image}}')"
     >
         <img
                 class="hidden-xs-up d-none"
-                src="uploads/{{ACCOUNT}}/{{HEADER_IMAGE_DEFAULT}}"
-                alt="name[]"
+                src="{{image}}"
+                alt="{{imageName}}"
         />
     </div>
 {{/block.items}}
