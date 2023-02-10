@@ -75,35 +75,42 @@ class ViewListener
         $this->modules = $modules;
     }
 
-    public function renderPartial(Event $event, RenderPartialDTO $renderPartialDTO, Item $item): string
+    public function renderPartial(Event $event, RenderPartialDTO $renderPartialDTO, Item $item = null): string
     {
-        if (is_file($this->templateDir . 'views/partials/fields/' . $renderPartialDTO->getPartial() . '.mustache')):
-            $renderTemplateDTO = new RenderTemplateDTO(
-                $renderPartialDTO->getPartial(),
-                $this->templateDir . 'views/partials/fields/',
-                ['currentItem', $item]
-            );
-        else :
-            $renderTemplateDTO = new RenderTemplateDTO(
-                $renderPartialDTO->getPartial(),
-                str_replace($this->baseDir, '', $this->coreTemplateDir) . 'views/partials/fields/',
-                ['currentItem' => $item]
-            );
-        endif;
+        //TODO move currentItem to place wher it is fired
+        $params = ['currentItem' => $item];
+        if (is_file($this->templateDir . 'views/partials/fields/' . $renderPartialDTO->partial . '.mustache')) {
+            $dir = $this->templateDir . 'views/partials/fields/';
+            $params = array_merge($params,$renderPartialDTO->params);
+        } elseif(is_file($this->templateDir . 'views/partials/' . $renderPartialDTO->partial . '.mustache')) {
+            $dir = $this->templateDir . 'views/partials/';
+        } elseif(is_file(str_replace($this->baseDir, '', $this->coreTemplateDir) . 'views/partials/'. $renderPartialDTO->partial . '.mustache')) {
+            $dir = str_replace($this->baseDir, '', $this->coreTemplateDir) . 'views/partials/';
+            $params = array_merge($params,$renderPartialDTO->params);
+        } else {
+            $dir = str_replace($this->baseDir, '', $this->coreTemplateDir) . 'views/partials/fields/';
+            $params = array_merge($params,$renderPartialDTO->params);
+        }
+
+        $renderTemplateDTO = new RenderTemplateDTO(
+            $renderPartialDTO->partial,
+            $dir,
+            $params
+        );
 
         return $this->renderTemplate($event, $renderTemplateDTO, '');
     }
 
     public function renderTemplate(Event $event, RenderTemplateDTO $renderTemplateDTO, ?string $baseDir = null): string
     {
-        $templatePath = $renderTemplateDTO->getTemplatePath();
-        $template = $renderTemplateDTO->getTemplate();
-        $params = $renderTemplateDTO->getParams();
+        $templatePath = $renderTemplateDTO->templatePath;
+        $template = $renderTemplateDTO->template;
+        $params = $renderTemplateDTO->params;
         $useRenderService = false;
 
         foreach ($this->modules as $key => $moduleDir):
             if (is_file($moduleDir . '/Template/' . $template . '.mustache')):
-                $renderTemplateDTO->setTemplatePath($moduleDir . '/Template/');
+                $renderTemplateDTO->templatePath = $moduleDir . '/Template/';
                 $useRenderService = true;
             endif;
         endforeach;
@@ -122,7 +129,7 @@ class ViewListener
 
     public function renderLayout(Event $event, RenderLayoutDTO $layoutDTO): string
     {
-        $layout = $this->layoutRepository->getById($layoutDTO->getLayoutId());
+        $layout = $this->layoutRepository->getById($layoutDTO->layoutId);
         if ($layout === null):
             return '';
         endif;

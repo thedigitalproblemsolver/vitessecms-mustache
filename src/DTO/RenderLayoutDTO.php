@@ -4,15 +4,5 @@ namespace VitesseCms\Mustache\DTO;
 
 final class RenderLayoutDTO
 {
-    private string $layoutId;
-
-    public function __construct(string $layoutId)
-    {
-        $this->layoutId = $layoutId;
-    }
-
-    public function getLayoutId(): string
-    {
-        return $this->layoutId;
-    }
+    public function __construct(readonly string $layoutId){}
 }
