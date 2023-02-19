@@ -1,26 +1,10 @@
-{{#block.items}}
-    <div
+<div
         class="header-image"
         style="background-image:url('{{image}}')"
-    >
-        <img
+>
+    <img
             class="hidden-xs-up d-none"
             src="{{image}}"
-            alt="name[]"
-        />
-    </div>
-{{/block.items}}
-{{^block.items}}
-    <div
-            class="header-image"
-            style="background-image:url('{{image}}')"
-    >
-        <img
-                class="hidden-xs-up d-none"
-                src="{{image}}"
-                alt="{{imageName}}"
-        />
-    </div>
-{{/block.items}}
-
-{{> block/readmore}}
+            alt="{{imageName}}"
+    />
+</div>
