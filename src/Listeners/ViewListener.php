@@ -78,25 +78,20 @@ class ViewListener
     public function renderPartial(Event $event, RenderPartialDTO $renderPartialDTO, Item $item = null): string
     {
         //TODO move currentItem to place wher it is fired
-        $params = ['currentItem' => $item];
+        $params = $renderPartialDTO->params;
+        $params['currentItem'] = $item;
+
         if (is_file($this->templateDir . 'views/partials/fields/' . $renderPartialDTO->partial . '.mustache')) {
             $dir = $this->templateDir . 'views/partials/fields/';
-            $params = array_merge($params,$renderPartialDTO->params);
         } elseif(is_file($this->templateDir . 'views/partials/' . $renderPartialDTO->partial . '.mustache')) {
             $dir = $this->templateDir . 'views/partials/';
         } elseif(is_file(str_replace($this->baseDir, '', $this->coreTemplateDir) . 'views/partials/'. $renderPartialDTO->partial . '.mustache')) {
             $dir = str_replace($this->baseDir, '', $this->coreTemplateDir) . 'views/partials/';
-            $params = array_merge($params,$renderPartialDTO->params);
         } else {
             $dir = str_replace($this->baseDir, '', $this->coreTemplateDir) . 'views/partials/fields/';
-            $params = array_merge($params,$renderPartialDTO->params);
         }
 
-        $renderTemplateDTO = new RenderTemplateDTO(
-            $renderPartialDTO->partial,
-            $dir,
-            $params
-        );
+        $renderTemplateDTO = new RenderTemplateDTO($renderPartialDTO->partial, $dir, $params);
 
         return $this->renderTemplate($event, $renderTemplateDTO, '');
     }
