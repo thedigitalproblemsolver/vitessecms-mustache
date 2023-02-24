@@ -7,15 +7,15 @@
     {{#block.items}}
         <article class="{{_id}} col-12 col-lg-4 col-xl-3" >
             <div class="card">
-                <a class="card-img-top text-center" href="{{slug[]}}" >
+                <a class="card-img-top text-center" href="{{BASE_URI}}{{slug[]}}" >
                     <img
-                        src="uploads/{{ACCOUNT}}/{{image}}?h=250"
-                        alt="{{name[]}}"
+                            src="{{uploads_uri}}{{image}}?h=250"
+                            alt="{{name[]}}"
                     />
                 </a>
                 <div class="card-body">
                     <h4 class="card-title">
-                        <a href="{{slug[]}}" >
+                        <a href="{{BASE_URI}}{{slug[]}}" >
                             {{name[]}}
                         </a>
                     </h4>
