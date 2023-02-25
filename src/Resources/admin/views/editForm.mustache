@@ -1,6 +1,6 @@
 <h1>
     Edit :
-    {{adminEditItem.name[]}}
+    {{adminEditItem.getNameField}}
     <div class="float-right">
         {{{adminButtons}}}
     </div>
@@ -13,13 +13,13 @@
         <div id="layout_editor_fields">
             <h4>%MUSTACHE_AVAILABLE_FIELDS%</h4>
             {{#adminEditItem.availableFields}}
-                <a href="#" class="d-block" id="{{_id}}" >{{name[]}}</a>
+                <a href="#" class="d-block" id="{{getId}}" >{{getNameField}}</a>
             {{/adminEditItem.availableFields}}
         </div>
         <div id="layout_editor_blocks">
             <h4 class="mt-4">%MUSTACHE_AVAILABLE_BLOCKS%</h4>
             {{#adminEditItem.availableBlocks}}
-                <a href="#" class="d-block" id="{{_id}}" >{{name[]}}</a>
+                <a href="#" class="d-block" id="{{getId}}" >{{getNameField}}</a>
             {{/adminEditItem.availableBlocks}}
         </div>
     </div>
