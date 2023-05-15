@@ -12,5 +12,6 @@ class ViewEnum extends AbstractEnum
     public const RENDER_LAYOUT_EVENT = 'view:renderLayout';
     public const ASSETS_LOAD_GRID_EDITOR = 'assets:loadGridEditor';
     public const ASSETS_LOAD_LAZY_LOADING = 'assets:loadLazyLoading';
+    public const ASSETS_LOAD_FONT_AWESOME = 'assets:loadFontAwesome';
     public const MODULE = 'Mustache';
 }
