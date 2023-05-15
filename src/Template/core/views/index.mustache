@@ -4,6 +4,7 @@
     {{> seo/meta }}
     {{{stylesheet}}}
     {{{inlinestylesheet}}}
+    {{{htmlHead}}}
     {{#IS_ADMIN}}
     {{/IS_ADMIN}}
     {{^IS_ADMIN}}
@@ -13,9 +14,6 @@
         {{{opengraph}}}
         {{> seo/bing/validation }}
         {{> seo/google/analytics }}
-        {{> seo/google/search_console }}
-        {{> seo/google/adsense_automatic_ads }}
-        {{> seo/google/tag_manager_head }}
         {{> seo/facebook/pixel}}
         {{> seo/pinterest/domain_verify}}
         {{> seo/mailchimp}}
@@ -23,11 +21,6 @@
     {{/IS_ADMIN}}
 </head>
 <body class="{{currentItem._id}} {{bodyClass}}" >
-{{#IS_ADMIN}}
-{{/IS_ADMIN}}
-{{^IS_ADMIN}}
-    {{> seo/google/tag_manager_body }}
-{{/IS_ADMIN}}
 {{#embedded}}
     {{{content}}}
 {{/embedded}}
