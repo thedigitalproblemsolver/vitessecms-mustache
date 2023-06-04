@@ -107,6 +107,7 @@ class ViewListener
             if (is_file($moduleDir . '/Template/' . $template . '.mustache')):
                 $renderTemplateDTO->templatePath = $moduleDir . '/Template/';
                 $useRenderService = true;
+                break;
             endif;
         endforeach;
 
