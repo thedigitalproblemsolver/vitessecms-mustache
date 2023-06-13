@@ -1,0 +1,45 @@
+<address id="address_{{_id}}" class="address-item" itemscope itemtype="http://schema.org/Organization">
+    <a href="{{BASE_URI}}">
+        <h5 itemprop="name">{{CONTACT_ADDRESS_COMPANYNAME}}</h5>
+    </a>
+    <div  class="mb-4" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+        <span itemprop="streetAddress">{{CONTACT_ADDRESS_STREET}} {{CONTACT_ADDRESS_HOUSENUMBER}}</span><br />
+        <span itemprop="postalCode">{{CONTACT_ADDRESS_ZIPCODE}}</span>
+        <span itemprop="addressLocality">{{CONTACT_ADDRESS_CITY}}{{#CONTACT_ADDRESS_COUNTRY}}, {{CONTACT_ADDRESS_COUNTRY}}{{/CONTACT_ADDRESS_COUNTRY}}</span><br />
+    </div>
+    {{#CONTACT_ADDRESS_PHONENUMBER}}
+        <i class="fa fa-phone"></i> <a href="tel:{{CONTACT_ADDRESS_PHONENUMBER}}" itemprop="telephone" target="_blank">{{CONTACT_ADDRESS_PHONENUMBER}}</a><br />
+    {{/CONTACT_ADDRESS_PHONENUMBER}}
+    {{#CONTACT_ADDRESS_EMAIL}}
+        <i class="fa fa-envelope"></i> <a href="mailto:{{CONTACT_ADDRESS_EMAIL}}" itemprop="email" target="_blank">{{CONTACT_ADDRESS_EMAIL}}</a><br />
+    {{/CONTACT_ADDRESS_EMAIL}}
+    <i class="fa fa-globe"></i> <a href="{{BASE_URI}}" itemprop="website" target="_blank">{{BASE_URI}}</a>
+    <table class="mt-4">
+        <tbody>
+        {{#CONTACT_VAT_NUMBER}}
+            <tr>
+                <th class="pr-4">%CONTACT_VAT_NUMBER_SHORT%</th>
+                <td>{{CONTACT_VAT_NUMBER}}</td>
+            </tr>
+        {{/CONTACT_VAT_NUMBER}}
+        {{#CONTACT_CHAMBER-OF-COMMERCE_NUMBER}}
+            <tr>
+                <th>%CONTACT_CHAMBER_OF_COMMERCE%</th>
+                <td>{{CONTACT_CHAMBER-OF-COMMERCE_NUMBER}}</td>
+            </tr>
+        {{/CONTACT_CHAMBER-OF-COMMERCE_NUMBER}}
+        {{#CONTACT_PAYMENT_IBAN}}
+            <tr>
+               <th>%CONTACT_IBAN%</th>
+                <td>{{CONTACT_PAYMENT_IBAN}}</td>
+            </tr>
+        {{/CONTACT_PAYMENT_IBAN}}
+        {{#CONTACT_PAYMENT_BIC}}
+            <tr>
+                <th>%CONTACT_BIC%</th>
+                <td>{{CONTACT_PAYMENT_BIC}}</td>
+            </tr>
+        {{/CONTACT_PAYMENT_BIC}}
+        </tbody>
+    </table>
+</address>
