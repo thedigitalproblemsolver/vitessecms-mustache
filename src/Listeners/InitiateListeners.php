@@ -30,7 +30,8 @@ class InitiateListeners  implements InitiateListenersInterface
                     new Mustache_Engine(),
                     $di->configuration->getAccountTemplateDir(),
                     $di->configuration->getTemplateDir(),
-                    $di->configuration->getCoreTemplateDir()
+                    $di->configuration->getCoreTemplateDir(),
+                    $di->configuration->getLanguageShort()
                 ),
                 SystemUtil::getModules($di->configuration)
             )
