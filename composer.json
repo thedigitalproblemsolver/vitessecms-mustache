@@ -22,7 +22,7 @@
     "ext-phalcon": "5.1.4",
     "vitessecms/sef": "^1.0.4",
     "vitessecms/core": "^1.2.0",
-    "vitessecms/admin": "^1.0.0",
+    "vitessecms/admin": "^1.1.0",
     "vitessecms/cli": "^1.1.0",
     "vitessecms/form": "^1.0.0",
     "vitessecms/database": "^1.0.0",
