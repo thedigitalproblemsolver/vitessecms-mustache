@@ -1,26 +1,29 @@
 <h1>
-    Edit :
-    {{adminEditItem.getNameField}}
-    <div class="float-right">
-        {{{adminButtons}}}
-    </div>
+    Edit : {{model.getNameField}}
 </h1>
 <div class="row">
-    <div class="col-xs-12 col-lg-9">
-    {{{ adminEditForm }}}
+    <div class="col-12">
+        {{{form}}}
     </div>
-    <div class="col-xs-12 col-lg-3">
+    <div class="col-12 col-lg-6">
         <div id="layout_editor_fields">
             <h4>%MUSTACHE_AVAILABLE_FIELDS%</h4>
-            {{#adminEditItem.availableFields}}
+            {{#availableFields}}
                 <a href="#" class="d-block" id="{{getId}}" >{{getNameField}}</a>
-            {{/adminEditItem.availableFields}}
+            {{/availableFields}}
         </div>
+    </div>
+    <div class="col-12 col-lg-6">
         <div id="layout_editor_blocks">
-            <h4 class="mt-4">%MUSTACHE_AVAILABLE_BLOCKS%</h4>
-            {{#adminEditItem.availableBlocks}}
+            <h4>%MUSTACHE_AVAILABLE_BLOCKS%</h4>
+            {{#availableBlocks}}
                 <a href="#" class="d-block" id="{{getId}}" >{{getNameField}}</a>
-            {{/adminEditItem.availableBlocks}}
+            {{/availableBlocks}}
         </div>
     </div>
 </div>
+<style>
+    html {
+        overflow: auto;
+    }
+</style>

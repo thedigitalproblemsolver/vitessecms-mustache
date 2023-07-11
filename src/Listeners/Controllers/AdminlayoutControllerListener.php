@@ -3,20 +3,14 @@
 namespace VitesseCms\Mustache\Listeners\Controllers;
 
 use Phalcon\Events\Event;
+use VitesseCms\Admin\Forms\AdminlistFormInterface;
 use VitesseCms\Mustache\Controllers\AdminlayoutController;
-use VitesseCms\Mustache\Models\Layout;
 
 class AdminlayoutControllerListener
 {
-    public function beforeEdit(Event $event, AdminlayoutController $controller, Layout $item){
-        if($item->getDatagroup() !== null):
-            $datagroup = $controller->repositories->datagroup->getById($item->getDatagroup());
-            $item->availableFields = [];
-            foreach( $datagroup->getDatafields() as $datafield) :
-                $item->availableFields[] = $controller->repositories->datafield->getById($datafield['id']);
-            endforeach;
-        endif;
-
-        $item->availableBlocks = $controller->repositories->block->findAll();
+    public function adminListFilter(Event $event, AdminlayoutController $controller, AdminlistFormInterface $form): void
+    {
+        $form->addNameField($form);
+        $form->addPublishedField($form);
     }
 }

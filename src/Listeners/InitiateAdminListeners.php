@@ -9,6 +9,7 @@ use VitesseCms\Core\Interfaces\InjectableInterface;
 use VitesseCms\Core\Utils\SystemUtil;
 use VitesseCms\Media\Enums\MediaEnum;
 use VitesseCms\Mustache\Controllers\AdminlayoutController;
+use VitesseCms\Mustache\Enum\LayoutEnum;
 use VitesseCms\Mustache\Enum\ViewEnum;
 use VitesseCms\Mustache\Listeners\Admin\AdminMenuListener;
 use VitesseCms\Mustache\Listeners\Admin\AssetsListener;
@@ -41,9 +42,7 @@ class InitiateAdminListeners implements InitiateListenersInterface
                 SystemUtil::getModules($di->configuration)
             )
         );
-        $di->eventsManager->attach(
-            MediaEnum::ASSETS_LISTENER,
-            new AssetsListener($di->configuration->getVendorNameDir())
-        );
+        $di->eventsManager->attach(MediaEnum::ASSETS_LISTENER, new AssetsListener($di->configuration->getVendorNameDir()));
+        $di->eventsManager->attach(LayoutEnum::LISTENER->value, new LayoutListener(new LayoutRepository()));
     }
 }
