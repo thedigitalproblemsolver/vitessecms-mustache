@@ -12,5 +12,7 @@
 <meta name="generator" content="{{WEBSITE_DEFAULT_NAME}}"/>
 <meta name="author" content="{{WEBSITE_DEFAULT_NAME}}">
 {{/WEBSITE_DEFAULT_NAME}}
-<link rel="canonical" href="{{BASE_URI}}{{currentItem.slug[]}}{{#PAGE_NUMBER}}?page={{PAGE_NUMBER}}{{/PAGE_NUMBER}}" />
+{{#CANONICAL_SLUG}}
+    <link rel="canonical" href="{{BASE_URI}}{{CANONICAL_SLUG}}" />
+{{/CANONICAL_SLUG}}
 <title>{{SEO_META_TITLE}}</title>
