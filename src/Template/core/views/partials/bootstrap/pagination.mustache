@@ -7,34 +7,28 @@
                 </div>
             </li>
             <li class="page-item">
+                <a class="page-link fa fa-fast-backward" href="{{pagination.getSlug}}"></a>
+            </li>
+            <li class="page-item">
                 <a
-                        class="page-link fa fa-fast-backward"
-                        href="{{pagination.getSlug}}"
-                        aria-label="Previous"
+                    class="page-link fa fa-step-backward"
+                    href="{{pagination.getSlug}}{{pagination.getSlugSeperator}}{{pagination.getUrlQueryKey}}={{pagination.getPrevious}}"
+                    aria-label="Previous"
+                    rel="prev"
                 ></a>
             </li>
             <li class="page-item">
                 <a
-                        class="page-link  fa fa-step-backward"
-                        href="{{pagination.getSlug}}{{pagination.getSlugSeperator}}{{pagination.getUrlQueryKey}}={{pagination.getPrevious}}
-                "
-                aria-label="Previous"
+                    class="page-link fa fa-step-forward"
+                    href="{{pagination.getSlug}}{{pagination.getSlugSeperator}}{{pagination.getUrlQueryKey}}={{pagination.getNext}}"
+                    aria-label="Next"
+                    rel="next"
                 ></a>
             </li>
             <li class="page-item">
                 <a
-                        class="page-link fa fa-step-forward"
-                        href="{{pagination.getSlug}}{{pagination.getSlugSeperator}}{{pagination.getUrlQueryKey}}={{pagination.getNext}}
-                "
-                aria-label="Next"
-                ></a>
-            </li>
-            <li class="page-item">
-                <a
-                        class="page-link fa fa-fast-forward"
-                        href="{{pagination.getSlug}}{{pagination.getSlugSeperator}}{{pagination.getUrlQueryKey}}={{pagination.getLast}}
-                "
-                aria-label="Next"
+                    class="page-link fa fa-fast-forward"
+                    href="{{pagination.getSlug}}{{pagination.getSlugSeperator}}{{pagination.getUrlQueryKey}}={{pagination.getLast}}"
                 ></a>
             </li>
         </ul>
