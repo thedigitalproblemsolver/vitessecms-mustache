@@ -2,12 +2,14 @@
     {{#block.items}}
         <div class="{{getId}} col-12 col-lg-4 col-xl-3" >
             <div class="card">
+                {{#image}}
                 <a class="card-img-top text-center mb-2" href="{{BASE_URI}}{{getSlug}}" >
                     <img
                             src="{{uploads_uri}}{{image}}?h=250"
                             alt="{{getNameField}}"
                     />
                 </a>
+                {{/image}}
                 {{#affiliateUrl}}
                     <div class="card-footer">
                         <a href="{{BASE_URI}}{{getSlug}}" class="d-none d-sm-block">
