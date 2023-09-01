@@ -3,27 +3,30 @@
         <div class="{{getId}} col-12 col-lg-4 col-xl-3" >
             <div class="card">
                 {{#image}}
-                <a class="card-img-top text-center mb-2" href="{{BASE_URI}}{{getSlug}}" >
-                    <img
-                            src="{{uploads_uri}}{{image}}?h=250"
-                            alt="{{getNameField}}"
-                    />
-                </a>
+                    <a class="card-img-top text-center mb-3" href="{{BASE_URI}}{{getSlug}}" >
+                        <img
+                                src="{{uploads_uri}}{{image}}?h=250"
+                                alt="{{getNameField}}"
+                                height="250"
+                                width="250"
+                                style="width: auto"
+                        />
+                    </a>
                 {{/image}}
                 {{#affiliateUrl}}
-                    <div class="card-footer">
-                        <a href="{{BASE_URI}}{{getSlug}}" class="d-none d-sm-block">
+                    <div class="card-footer" style="background: none">
+                        <a href="{{BASE_URI}}{{getSlug}}" class="d-none d-sm-inline-block">
                             meer info
                         </a>
                         <a
                                 href="{{affiliateUrl}}"
                                 target="_blank"
                                 rel="nofollow"
-                                class="btn btn-success clickAction float-right"
+                                class="btn btn-success clickAction text-lowercase d-block d-sm-inline-block float-sm-right"
                                 data-category="affiliate"
                                 data-action="order-button"
                         >
-                            <i class="fa fa-cart-plus"></i>&nbsp;&nbsp;{{{SHOP_CURRENCY_BASE}}} {{price_sale}}
+                            bestel {{price_sale}}
                         </a>
                     </div>
                 {{/affiliateUrl}}

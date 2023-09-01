@@ -1,7 +1,10 @@
 {{#currentItem.image}}
     <img
-        class="img-fluid image-add-zoom"
-        src="{{uploads_uri}}{{currentItem.image}}?h=500"
-        alt="{{currentItem.name[]}}"
+            class="img-fluid image-add-zoom"
+            src="{{uploads_uri}}{{currentItem.image}}?h=500"
+            alt="{{currentItem.getNamField}}"
+            height="500"
+            width="500"
+            style="width: auto"
     />
 {{/currentItem.image}}
