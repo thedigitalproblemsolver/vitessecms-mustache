@@ -6,18 +6,18 @@
             id="{{elementId}}{{#short}}_{{short}}{{/short}}"
             class="form-control has-filemanager"
             name="{{elementName}}{{#short}}[{{short}}]{{/short}}"
-            value="{{elementDefault}}"
+            value="{{#elementValue}}{{elementValue}}{{/elementValue}}{{^elementValue}}{{elementDefault}}{{/elementValue}}"
             type="text"
             readonly="readonly"
-            {{#attributes.required}}
-                required="required"
-            {{/attributes.required}}
+        {{#attributes.required}}
+            required="required"
+        {{/attributes.required}}
     />
     <span class="input-group-prepend">
         <a
-            href="{{BASE_URI}}filemanager/index"
-            id="btn_{{elementId}}{{#short}}_{{short}}{{/short}}"
-            class="openfilemanager btn btn-info"
+                href="{{BASE_URI}}filemanager/index"
+                id="btn_{{elementId}}{{#short}}_{{short}}{{/short}}"
+                class="openfilemanager btn btn-info"
         >
             filemanager
         </a>
