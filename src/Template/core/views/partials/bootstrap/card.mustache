@@ -3,13 +3,13 @@
         {{#block.imageFullWidth}}
             <div
                 class="card-image image-cover-top"
-                style="background-image:url({{UPLOAD_URI}}/{{image}})"
+                style="background-image:url({{UPLOAD_URI}}{{image}})"
             >
                 <a href="{{slug[]}}">
                     <noscript>
                         <img
                             class="hidden-xs-up d-none"
-                            src="{{UPLOAD_URI}}/{{image}}?h=250"
+                            src="{{UPLOAD_URI}}{{image}}?h=250"
                             alt="{{name[]}}"
                         />
                     </noscript>
@@ -21,7 +21,7 @@
                 <a href="{{slug[]}}" class="text-center">
                     <img
                         class="card-img-top img-fluid"
-                        src="{{UPLOAD_URI}}/{{image}}?h=250"
+                        src="{{UPLOAD_URI}}{{image}}?h=250"
                         alt="{{name[]}}"
                     />
                 </a>
