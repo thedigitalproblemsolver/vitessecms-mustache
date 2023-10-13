@@ -1,28 +1,31 @@
+lll
 {{#pagination.hasPages}}
-<nav>
-    <ul class="pagination justify-content-end">
-        <li class="page-item"><div class="page-link">{{pagination.count}} %ADMIN_ITEMS%</div></li>
-        {{#pagination.hasPreviousPage}}
+    <nav>
+        <ul class="pagination justify-content-end">
             <li class="page-item">
-                <a class="page-link fa fa-fast-backward" href="{{pagination.getFirstPageUrl}}"></a>
+                <div class="page-link">{{pagination.count}} %ADMIN_ITEMS%</div>
             </li>
+            {{#pagination.hasPreviousPage}}
+                <li class="page-item">
+                    <a class="page-link fa fa-fast-backward" href="{{pagination.getFirstPageUrl}}"></a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link fa fa-step-backward" rel="prev" href="{{pagination.getPreviousPageUrl}}"></a>
+                </li>
+            {{/pagination.hasPreviousPage}}
             <li class="page-item">
-                <a class="page-link fa fa-step-backward" rel="prev" href="{{pagination.getPreviousPageUrl}}"></a>
+                <div class="page-link">
+                    {{pagination.getFirstNumberInList}} - {{pagination.getLastNumberInList}}
+                </div>
             </li>
-        {{/pagination.hasPreviousPage}}
-        <li class="page-item">
-            <div class="page-link">
-                {{pagination.getFirstNumberInList}} - {{pagination.getLastNumberInList}}
-            </div>
-        </li>
-        {{#pagination.hasNextPage}}
-            <li class="page-item">
-                <a class="page-link fa fa-step-forward" rel="next" href="{{pagination.getNextPageUrl}}"></a>
-            </li>
-            <li class="page-item">
-                <a class="page-link fa fa-fast-forward" href="{{pagination.getLastPageUrl}}"></a>
-            </li>
-        {{/pagination.hasNextPage}}
-    </ul>
-</nav>
+            {{#pagination.hasNextPage}}
+                <li class="page-item">
+                    <a class="page-link fa fa-step-forward" rel="next" href="{{pagination.getNextPageUrl}}"></a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link fa fa-fast-forward" href="{{pagination.getLastPageUrl}}"></a>
+                </li>
+            {{/pagination.hasNextPage}}
+        </ul>
+    </nav>
 {{/pagination.hasPages}}
