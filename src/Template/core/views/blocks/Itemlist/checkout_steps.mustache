@@ -1,15 +1,11 @@
 <nav>
     <ul>
         {{#block.items}}
-        <li class="{{_id}}" >
-            <a href="#" data-slug="{{slug[]}}" >
-                {{name[]}}
-            </a>
-        </li>
+            <li class="{{getId}}">
+                <a href="#" data-slug="{{getSlug}}">
+                    {{getNameField}}
+                </a>
+            </li>
         {{/block.items}}
     </ul>
 </nav>
-{{> block/readmore}}
-{{#pagination}}
-    {{> bootstrap/pagination_helper}}
-{{/pagination}}

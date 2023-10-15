@@ -20,12 +20,12 @@
         {{> seo/cookieconsent}}
     {{/IS_ADMIN}}
 </head>
-<body class="{{currentItem._id}} {{bodyClass}}" >
+<body class="{{currentItem._id}} {{bodyClass}}">
 {{#embedded}}
     {{{content}}}
 {{/embedded}}
 {{^embedded}}
-    {{{adminToolbar}}}
+    {{{admintoolbar}}}
     {{{topbar}}}
     {{> menu/aside }}
     {{> menu/panel }}
