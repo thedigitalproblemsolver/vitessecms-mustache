@@ -1,0 +1,47 @@
+<div class="row productlist mb-5">
+    {{#block.items}}
+        <div class="{{getId}} col-12 col-lg-4 col-xl-3" >
+            <div class="card">
+                {{#image}}
+                    <a class="card-img-top text-center mb-3" href="{{BASE_URI}}{{getSlug}}" >
+                        <img
+                                src="{{uploads_uri}}{{image}}?h=250"
+                                alt="{{getNameField}}"
+                                height="250"
+                                width="250"
+                                style="width: auto"
+                        />
+                    </a>
+                {{/image}}
+                {{#affiliateUrl}}
+                    <div class="card-footer" style="background: none">
+                        <a href="{{BASE_URI}}{{getSlug}}" class="d-none d-sm-inline-block">
+                            meer info
+                        </a>
+                        <a
+                                href="{{affiliateUrl}}"
+                                target="_blank"
+                                rel="nofollow"
+                                class="btn btn-success clickAction text-lowercase d-block d-sm-inline-block float-sm-right"
+                                data-category="affiliate"
+                                data-action="order-button"
+                        >
+                            bestel {{price_sale}}
+                        </a>
+                    </div>
+                {{/affiliateUrl}}
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="{{BASE_URI}}{{getSlug}}" >
+                            {{getNameField}}
+                        </a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    {{/block.items}}
+</div>
+{{> block/readmore}}
+{{#pagination}}
+    {{> bootstrap/pagination_helper}}
+{{/pagination}}

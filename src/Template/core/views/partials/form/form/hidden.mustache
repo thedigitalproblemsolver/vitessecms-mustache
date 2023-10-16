@@ -1,6 +1,6 @@
 <input
-    id="{{elementName}}{{#short}}_{{short}}{{/short}}"
-    name="{{elementName}}{{#short}}[{{short}}]{{/short}}"
-    value="{{elementValue}}"
-    type="hidden"
+        id="{{elementName}}{{#short}}_{{short}}{{/short}}"
+        name="{{elementName}}{{#short}}[{{short}}]{{/short}}"
+        value="{{#elementValue}}{{elementValue}}{{/elementValue}}{{^elementValue}}{{elementDefault}}{{/elementValue}}"
+        type="hidden"
 />

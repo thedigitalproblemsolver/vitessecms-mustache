@@ -1,7 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace VitesseCms\Mustache\Controllers;
 
+use ArrayIterator;
+use stdClass;
 use VitesseCms\Admin\Interfaces\AdminModelAddableInterface;
 use VitesseCms\Admin\Interfaces\AdminModelCopyableInterface;
 use VitesseCms\Admin\Interfaces\AdminModelDeletableInterface;
@@ -41,13 +44,13 @@ class AdminlayoutController extends AbstractControllerAdmin implements
     AdminModelDeletableInterface,
     AdminModelAddableInterface
 {
-    use TraitAdminModelList,
-        TraitAdminModelPublishable,
-        TraitAdminModelEditable,
-        TraitAdminModelSave,
-        TraitAdminModelCopyable,
-        TraitAdminModelDeletable,
-        TraitAdminModelAddable;
+    use TraitAdminModelAddable;
+    use TraitAdminModelCopyable;
+    use TraitAdminModelDeletable;
+    use TraitAdminModelEditable;
+    use TraitAdminModelList;
+    use TraitAdminModelPublishable;
+    use TraitAdminModelSave;
 
     private LayoutRepository $layoutRepository;
     private DatagroupRepository $datagroupRepository;
@@ -58,10 +61,10 @@ class AdminlayoutController extends AbstractControllerAdmin implements
     {
         parent::OnConstruct();
 
-        $this->layoutRepository = $this->eventsManager->fire(LayoutEnum::GET_REPOSITORY->value,new \stdClass());
-        $this->datagroupRepository = $this->eventsManager->fire(DatagroupEnum::GET_REPOSITORY->value, new \stdClass());
-        $this->datafieldRepository = $this->eventsManager->fire(DatafieldEnum::GET_REPOSITORY->value, new \stdClass());
-        $this->blockRepository = $this->eventsManager->fire(BlockEnum::LISTENER_GET_REPOSITORY->value, new \stdClass());
+        $this->layoutRepository = $this->eventsManager->fire(LayoutEnum::GET_REPOSITORY->value, new stdClass());
+        $this->datagroupRepository = $this->eventsManager->fire(DatagroupEnum::GET_REPOSITORY->value, new stdClass());
+        $this->datafieldRepository = $this->eventsManager->fire(DatafieldEnum::GET_REPOSITORY->value, new stdClass());
+        $this->blockRepository = $this->eventsManager->fire(BlockEnum::LISTENER_GET_REPOSITORY->value, new stdClass());
     }
 
     public function getModel(string $id): ?AbstractCollection
@@ -72,26 +75,7 @@ class AdminlayoutController extends AbstractControllerAdmin implements
         };
     }
 
-    private function getExistingModel(string $id): Layout
-    {
-        $model = $this->layoutRepository->getById($id, false);
-
-        if($model->getDatagroup() !== null):
-            $datagroup = $this->datagroupRepository->getById($model->getDatagroup());
-            $availableFields = [];
-            foreach( $datagroup->getDatafields() as $datafield) :
-                $availableFields[] = $this->datafieldRepository->getById($datafield['id']);
-            endforeach;
-            $this->addFormParams('availableFields', $availableFields);
-        endif;
-
-        $this->addFormParams('model', $model);
-        $this->addFormParams('availableBlocks', $this->blockRepository->findAll());
-
-        return $model;
-    }
-
-    public function getModelList( ?FindValueIterator $findValueIterator): \ArrayIterator
+    public function getModelList(?FindValueIterator $findValueIterator): ArrayIterator
     {
         return $this->layoutRepository->findAll(
             $findValueIterator,
@@ -116,5 +100,24 @@ class AdminlayoutController extends AbstractControllerAdmin implements
     protected function getTemplatePath(): string
     {
         return 'mustache/src/Resources/admin/views/';
+    }
+
+    private function getExistingModel(string $id): Layout
+    {
+        $model = $this->layoutRepository->getById($id, false);
+
+        if ($model->getDatagroup() !== null):
+            $datagroup = $this->datagroupRepository->getById($model->getDatagroup());
+            $availableFields = [];
+            foreach ($datagroup->getDatafields() as $datafield) :
+                $availableFields[] = $this->datafieldRepository->getById($datafield['id']);
+            endforeach;
+            $this->addFormParams('availableFields', $availableFields);
+        endif;
+
+        $this->addFormParams('model', $model);
+        $this->addFormParams('availableBlocks', $this->blockRepository->findAll());
+
+        return $model;
     }
 }

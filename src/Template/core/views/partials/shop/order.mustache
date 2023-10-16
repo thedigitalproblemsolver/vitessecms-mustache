@@ -132,7 +132,7 @@
                 </tr>
                 <tr>
                     <th>%ADDRESS_COUNTRY%</th>
-                    <td>{{orderItem.shiptoAddress.countryName}}</td>
+                    <td>{{orderItem.shiptoAddress.countryName[]}}</td>
                 </tr>
                 <tr>
                     <th>%ADDRESS_PHONENUMBER%</th>
@@ -205,11 +205,11 @@
     </tr>
     <tr>
         <td colspan="4" align="right"><b>%SHOP_SUBTOTAL%</b></td>
-        <td align="right">{{{SHOP_CURRENCY_BASE}}} {{orderItem.items.subTotalDisplay}}</td>
+        <td align="right">{{{SHOP_CURRENCY_BASE}}} {{orderItem.getItemsSubTotalDisplay}}</td>
     </tr>
     <tr>
         <td align="right" colspan="4"><b>%SHOP_VAT%</b></td>
-        <td align="right">{{{SHOP_CURRENCY_BASE}}} {{orderItem.items.vatDisplay}}</td>
+        <td align="right">{{{SHOP_CURRENCY_BASE}}} {{orderItem.getItemsVatDisplay}}</td>
     </tr>
     <tr>
         <td align="right" colspan="4"><b>%SHOP_SHIPPING%</b></td>
@@ -246,7 +246,7 @@
             <b>%SHOP_ENDTOTAL%</b>
         </td>
         <th align="right"  style="text-align: right">
-            {{{SHOP_CURRENCY_BASE}}} {{orderItem.totalDisplay}}
+            {{{SHOP_CURRENCY_BASE}}} {{orderItem.getTotalDisplay}}
         </th>
     </tr>
     </tbody>

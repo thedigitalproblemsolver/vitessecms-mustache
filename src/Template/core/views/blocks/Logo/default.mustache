@@ -1,18 +1,18 @@
-<div class="logo-default" itemscope itemtype="http://schema.org/Brand" >
+<div class="logo-default" itemscope itemtype="http://schema.org/Brand">
     <a href="{{BASE_URI}}">
         <img
-            itemprop="logo"
-            src="{{UPLOAD_URI}}/{{SITE_LOGO_DEFAULT}}"
-            alt="{{WEBSITE_DEFAULT_NAME}}{{#SITE_LABEL_MOTTO}} | {{SITE_LABEL_MOTTO}}{{/SITE_LABEL_MOTTO}}"
+                itemprop="logo"
+                src="{{UPLOAD_URI}}{{SITE_LOGO_DEFAULT}}"
+                alt="{{WEBSITE_DEFAULT_NAME}}{{#SITE_LABEL_MOTTO}} | {{SITE_LABEL_MOTTO}}{{/SITE_LABEL_MOTTO}}"
         />
     </a>
     {{#displayMotto}}
         {{#SITE_LABEL_MOTTO}}
-        <p itemprop="description">
-            <a href="{{BASE_URI}}">
-                {{{SITE_LABEL_MOTTO}}}
-            </a>
-        </p>
+            <p itemprop="description">
+                <a href="{{BASE_URI}}">
+                    {{{SITE_LABEL_MOTTO}}}
+                </a>
+            </p>
         {{/SITE_LABEL_MOTTO}}
     {{/displayMotto}}
 </div>

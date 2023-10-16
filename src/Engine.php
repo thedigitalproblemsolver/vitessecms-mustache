@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace VitesseCms\Mustache;
 
@@ -44,12 +45,12 @@ use Traversable;
  */
 class Engine extends Mustache_Engine
 {
-    const VERSION = '2.11.1';
-    const SPEC_VERSION = '1.1.2';
+    public const VERSION = '2.11.1';
+    public const SPEC_VERSION = '1.1.2';
 
-    const PRAGMA_FILTERS = 'FILTERS';
-    const PRAGMA_BLOCKS = 'BLOCKS';
-    const PRAGMA_ANCHORED_DOT = 'ANCHORED-DOT';
+    public const PRAGMA_FILTERS = 'FILTERS';
+    public const PRAGMA_BLOCKS = 'BLOCKS';
+    public const PRAGMA_ANCHORED_DOT = 'ANCHORED-DOT';
 
     // Known pragmas
     private static $knownPragmas = array(
@@ -190,7 +191,9 @@ class Engine extends Mustache_Engine
 
         if (isset($options['escape'])) {
             if (!is_callable($options['escape'])) {
-                throw new Mustache_Exception_InvalidArgumentException('Mustache Constructor "escape" option must be callable');
+                throw new Mustache_Exception_InvalidArgumentException(
+                    'Mustache Constructor "escape" option must be callable'
+                );
             }
 
             $this->escape = $options['escape'];
@@ -236,7 +239,9 @@ class Engine extends Mustache_Engine
         }
 
         if (!$this->partialsLoader instanceof Mustache_Loader_MutableLoader) {
-            throw new Mustache_Exception_RuntimeException('Unable to set partials on an immutable Mustache Loader instance');
+            throw new Mustache_Exception_RuntimeException(
+                'Unable to set partials on an immutable Mustache Loader instance'
+            );
         }
 
         $this->partialsLoader->setTemplates($partials);
@@ -384,7 +389,15 @@ class Engine extends Mustache_Engine
         $compiler = $this->getCompiler();
         $compiler->setPragmas($this->getPragmas());
 
-        return $compiler->compile($source, $tree, $name, isset($this->escape), $this->charset, $this->strictCallables, $this->entityFlags);
+        return $compiler->compile(
+            $source,
+            $tree,
+            $name,
+            isset($this->escape),
+            $this->charset,
+            $this->strictCallables,
+            $this->entityFlags
+        );
     }
 
     /**
@@ -707,7 +720,9 @@ class Engine extends Mustache_Engine
     public function setLogger($logger = null)
     {
         if ($logger !== null && !($logger instanceof Mustache_Logger || is_a($logger, 'Psr\\Log\\LoggerInterface'))) {
-            throw new Mustache_Exception_InvalidArgumentException('Expected an instance of Mustache_Logger or Psr\\Log\\LoggerInterface.');
+            throw new Mustache_Exception_InvalidArgumentException(
+                'Expected an instance of Mustache_Logger or Psr\\Log\\LoggerInterface.'
+            );
         }
 
         if ($this->getCache()->getLogger() === null) {
