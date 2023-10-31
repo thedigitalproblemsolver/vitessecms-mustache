@@ -1,19 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace VitesseCms\Mustache\Listeners;
 
 use Mustache_Engine;
-use VitesseCms\Admin\Utils\AdminUtil;
 use VitesseCms\Core\Interfaces\InitiateListenersInterface;
 use VitesseCms\Core\Interfaces\InjectableInterface;
 use VitesseCms\Core\Utils\SystemUtil;
 use VitesseCms\Mustache\Enum\ViewEnum;
 use VitesseCms\Mustache\Listeners\Admin\AdminMenuListener;
-use VitesseCms\Mustache\Listeners\Admin\AssetsListener;
 use VitesseCms\Mustache\Repositories\LayoutRepository;
 use VitesseCms\Mustache\Services\RenderService;
 
-class InitiateListeners  implements InitiateListenersInterface
+class InitiateListeners implements InitiateListenersInterface
 {
     public static function setListeners(InjectableInterface $di): void
     {
@@ -31,13 +31,15 @@ class InitiateListeners  implements InitiateListenersInterface
                     $di->configuration->getAccountTemplateDir(),
                     $di->configuration->getTemplateDir(),
                     $di->configuration->getCoreTemplateDir(),
-                    $di->configuration->getLanguageShort()
+                    $di->configuration->getLanguageShort(),
+                    $di->setting,
+                    $di->configuration
                 ),
                 SystemUtil::getModules($di->configuration)
             )
         );
 
-        if($di->user->hasAdminAccess()):
+        if ($di->user->hasAdminAccess()):
             $di->eventsManager->attach('adminMenu', new AdminMenuListener());
         endif;
     }
