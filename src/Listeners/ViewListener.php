@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace VitesseCms\Mustache\Listeners;
 
@@ -12,67 +14,18 @@ use VitesseCms\Mustache\DTO\RenderTemplateDTO;
 use VitesseCms\Mustache\Repositories\LayoutRepository;
 use VitesseCms\Mustache\Services\RenderService;
 
-class ViewListener
+final class ViewListener
 {
-    /**
-     * @var ViewService
-     */
-    private $viewService;
-
-    /**
-     * @var string
-     */
-    private $baseDir;
-
-    /**
-     * @var LayoutRepository
-     */
-    private $layoutRepository;
-
-    /**
-     * @var string
-     */
-    private $coreTemplateDir;
-
-    /**
-     * @var string
-     */
-    private $templateDir;
-
-    /**
-     * @var string
-     */
-    private $accountTemplateDir;
-
-    /**
-     * @var RenderService
-     */
-    private $renderService;
-
-    /**
-     * @var array
-     */
-    private $modules;
-
     public function __construct(
-        ViewService      $viewService,
-        string           $baseDir,
-        string           $templateDir,
-        string           $coreTemplateDir,
-        string           $accountTemplateDir,
-        LayoutRepository $layoutRepository,
-        RenderService    $renderService,
-        array            $modules
-    )
-    {
-        $this->viewService = $viewService;
-        $this->baseDir = $baseDir;
-        $this->layoutRepository = $layoutRepository;
-        $this->coreTemplateDir = $coreTemplateDir;
-        $this->templateDir = $templateDir;
-        $this->accountTemplateDir = $accountTemplateDir;
-        $this->renderService = $renderService;
-        $this->modules = $modules;
+        private readonly ViewService $viewService,
+        private readonly string $baseDir,
+        private readonly string $templateDir,
+        private readonly string $coreTemplateDir,
+        private readonly string $accountTemplateDir,
+        private readonly LayoutRepository $layoutRepository,
+        private readonly RenderService $renderService,
+        private readonly array $modules
+    ) {
     }
 
     public function renderPartial(Event $event, RenderPartialDTO $renderPartialDTO, Item $item = null): string
@@ -83,9 +36,15 @@ class ViewListener
 
         if (is_file($this->templateDir . 'views/partials/fields/' . $renderPartialDTO->partial . '.mustache')) {
             $dir = $this->templateDir . 'views/partials/fields/';
-        } elseif(is_file($this->templateDir . 'views/partials/' . $renderPartialDTO->partial . '.mustache')) {
+        } elseif (is_file($this->templateDir . 'views/partials/' . $renderPartialDTO->partial . '.mustache')) {
             $dir = $this->templateDir . 'views/partials/';
-        } elseif(is_file(str_replace($this->baseDir, '', $this->coreTemplateDir) . 'views/partials/'. $renderPartialDTO->partial . '.mustache')) {
+        } elseif (is_file(
+            str_replace(
+                $this->baseDir,
+                '',
+                $this->coreTemplateDir
+            ) . 'views/partials/' . $renderPartialDTO->partial . '.mustache'
+        )) {
             $dir = str_replace($this->baseDir, '', $this->coreTemplateDir) . 'views/partials/';
         } else {
             $dir = str_replace($this->baseDir, '', $this->coreTemplateDir) . 'views/partials/fields/';
