@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace VitesseCms\Mustache\Listeners;
 
 use Mustache_Engine;
-use VitesseCms\Admin\Utils\AdminUtil;
 use VitesseCms\Core\Interfaces\InitiateListenersInterface;
 use VitesseCms\Core\Interfaces\InjectableInterface;
 use VitesseCms\Core\Utils\SystemUtil;
@@ -37,12 +38,17 @@ class InitiateAdminListeners implements InitiateListenersInterface
                     $di->configuration->getAccountTemplateDir(),
                     $di->configuration->getTemplateDir(),
                     $di->configuration->getCoreTemplateDir(),
-                    $di->configuration->getLanguageShort()
+                    $di->configuration->getLanguageShort(),
+                    $di->setting,
+                    $di->configuration
                 ),
                 SystemUtil::getModules($di->configuration)
             )
         );
-        $di->eventsManager->attach(MediaEnum::ASSETS_LISTENER, new AssetsListener($di->configuration->getVendorNameDir()));
+        $di->eventsManager->attach(
+            MediaEnum::ASSETS_LISTENER,
+            new AssetsListener($di->configuration->getVendorNameDir())
+        );
         $di->eventsManager->attach(LayoutEnum::LISTENER->value, new LayoutListener(new LayoutRepository()));
     }
 }
