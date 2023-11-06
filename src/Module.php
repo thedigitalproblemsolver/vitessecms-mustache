@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace VitesseCms\Mustache;
 
+use Phalcon\Di\DiInterface;
 use VitesseCms\Admin\Utils\AdminUtil;
+use VitesseCms\Block\Models\Block;
 use VitesseCms\Block\Repositories\BlockRepository;
 use VitesseCms\Core\AbstractModule;
-use Phalcon\Di\DiInterface;
 use VitesseCms\Database\Enums\DatabaseEnum;
 use VitesseCms\Datafield\Repositories\DatafieldRepository;
 use VitesseCms\Datagroup\Repositories\DatagroupRepository;
@@ -23,7 +26,7 @@ class Module extends AbstractModule
                 new AdminRepositoryCollection(
                     new DatagroupRepository(),
                     new DatafieldRepository(),
-                    new BlockRepository()
+                    new BlockRepository(Block::class)
                 )
             );
         endif;
