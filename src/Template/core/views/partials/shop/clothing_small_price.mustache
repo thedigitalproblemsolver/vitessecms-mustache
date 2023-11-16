@@ -1,18 +1,18 @@
 <div
-    itemprop="offers"
-    itemscope
-    itemtype="http://schema.org/Offer"
-    class="float-right d-flex justify-content-start h4"
+        itemprop="offers"
+        itemscope
+        itemtype="http://schema.org/Offer"
+        class="float-right d-flex justify-content-start h4"
 >
+    <meta itemprop="availability" content="https://schema.org/InStock"/>
+    <meta itemprop="priceCurrency"
+          content="{{#SHOP_CURRENCY_ISO}}{{SHOP_CURRENCY_ISO}}{{/SHOP_CURRENCY_ISO}}{{^SHOP_CURRENCY_ISO}}EUR{{/SHOP_CURRENCY_ISO}}"/>
     {{#price_discountDisplay}}
+        <meta itemprop="price" content="{{price_sale}}"/>
         <div class="container-discount-price">
             <div class="pull-right">
-                                <span itemprop="priceCurrency" content="{{{SHOP_CURRENCY_ISO}}}">
-                                    {{{SHOP_CURRENCY_BASE}}}
-                                </span>
-                <span itemprop="price" content="{{price_sale}}">
-                                    {{price_discountDisplay}}
-                                </span>
+                {{{SHOP_CURRENCY_BASE}}}
+                {{price_discountDisplay}}
             </div>
             <small class="pull-right mr-3">
                 <s>
@@ -22,12 +22,9 @@
         </div>
     {{/price_discountDisplay}}
     {{^price_discountDisplay}}
-        <span itemprop="priceCurrency" content="{{{SHOP_CURRENCY_ISO}}}">
-            {{{SHOP_CURRENCY_BASE}}}
-        </span>
+        <meta itemprop="price" content="{{price_sale}}"/>
+        {{{SHOP_CURRENCY_BASE}}}
         &nbsp;
-        <span itemprop="price" content="{{price_sale}}">
-            {{price_saleDisplay}}
-        </span>
+        {{price_saleDisplay}}
     {{/price_discountDisplay}}
 </div>
