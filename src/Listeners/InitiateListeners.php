@@ -15,32 +15,32 @@ use VitesseCms\Mustache\Services\RenderService;
 
 class InitiateListeners implements InitiateListenersInterface
 {
-    public static function setListeners(InjectableInterface $di): void
+    public static function setListeners(InjectableInterface $injectable): void
     {
-        $di->eventsManager->attach(
+        $injectable->eventsManager->attach(
             ViewEnum::VIEW_LISTENER,
             new ViewListener(
-                $di->view,
-                $di->configuration->getVendorNameDir(),
-                $di->configuration->getTemplateDir(),
-                $di->configuration->getCoreTemplateDir(),
-                $di->configuration->getAccountTemplateDir(),
+                $injectable->view,
+                $injectable->configuration->getVendorNameDir(),
+                $injectable->configuration->getTemplateDir(),
+                $injectable->configuration->getCoreTemplateDir(),
+                $injectable->configuration->getAccountTemplateDir(),
                 new LayoutRepository(),
                 new RenderService(
                     new Mustache_Engine(),
-                    $di->configuration->getAccountTemplateDir(),
-                    $di->configuration->getTemplateDir(),
-                    $di->configuration->getCoreTemplateDir(),
-                    $di->configuration->getLanguageShort(),
-                    $di->setting,
-                    $di->configuration
+                    $injectable->configuration->getAccountTemplateDir(),
+                    $injectable->configuration->getTemplateDir(),
+                    $injectable->configuration->getCoreTemplateDir(),
+                    $injectable->configuration->getLanguageShort(),
+                    $injectable->setting,
+                    $injectable->configuration
                 ),
-                SystemUtil::getModules($di->configuration)
+                SystemUtil::getModules($injectable->configuration)
             )
         );
 
-        if ($di->user->hasAdminAccess()):
-            $di->eventsManager->attach('adminMenu', new AdminMenuListener());
+        if ($injectable->user->hasAdminAccess()):
+            $injectable->eventsManager->attach('adminMenu', new AdminMenuListener());
         endif;
     }
 }

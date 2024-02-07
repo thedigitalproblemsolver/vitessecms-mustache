@@ -20,35 +20,35 @@ use VitesseCms\Mustache\Services\RenderService;
 
 class InitiateAdminListeners implements InitiateListenersInterface
 {
-    public static function setListeners(InjectableInterface $di): void
+    public static function setListeners(InjectableInterface $injectable): void
     {
-        $di->eventsManager->attach('adminMenu', new AdminMenuListener());
-        $di->eventsManager->attach(AdminlayoutController::class, new AdminlayoutControllerListener());
-        $di->eventsManager->attach(
+        $injectable->eventsManager->attach('adminMenu', new AdminMenuListener());
+        $injectable->eventsManager->attach(AdminlayoutController::class, new AdminlayoutControllerListener());
+        $injectable->eventsManager->attach(
             ViewEnum::VIEW_LISTENER,
             new ViewListener(
-                $di->view,
-                $di->configuration->getVendorNameDir(),
-                $di->configuration->getTemplateDir(),
-                $di->configuration->getCoreTemplateDir(),
-                $di->configuration->getAccountTemplateDir(),
+                $injectable->view,
+                $injectable->configuration->getVendorNameDir(),
+                $injectable->configuration->getTemplateDir(),
+                $injectable->configuration->getCoreTemplateDir(),
+                $injectable->configuration->getAccountTemplateDir(),
                 new LayoutRepository(),
                 new RenderService(
                     new Mustache_Engine(),
-                    $di->configuration->getAccountTemplateDir(),
-                    $di->configuration->getTemplateDir(),
-                    $di->configuration->getCoreTemplateDir(),
-                    $di->configuration->getLanguageShort(),
-                    $di->setting,
-                    $di->configuration
+                    $injectable->configuration->getAccountTemplateDir(),
+                    $injectable->configuration->getTemplateDir(),
+                    $injectable->configuration->getCoreTemplateDir(),
+                    $injectable->configuration->getLanguageShort(),
+                    $injectable->setting,
+                    $injectable->configuration
                 ),
-                SystemUtil::getModules($di->configuration)
+                SystemUtil::getModules($injectable->configuration)
             )
         );
-        $di->eventsManager->attach(
+        $injectable->eventsManager->attach(
             MediaEnum::ASSETS_LISTENER,
-            new AssetsListener($di->configuration->getVendorNameDir())
+            new AssetsListener($injectable->configuration->getVendorNameDir())
         );
-        $di->eventsManager->attach(LayoutEnum::LISTENER->value, new LayoutListener(new LayoutRepository()));
+        $injectable->eventsManager->attach(LayoutEnum::LISTENER->value, new LayoutListener(new LayoutRepository()));
     }
 }
