@@ -9,7 +9,6 @@ use VitesseCms\Admin\Utils\AdminUtil;
 use VitesseCms\Block\Models\Block;
 use VitesseCms\Block\Repositories\BlockRepository;
 use VitesseCms\Core\AbstractModule;
-use VitesseCms\Database\Enums\DatabaseEnum;
 use VitesseCms\Datafield\Repositories\DatafieldRepository;
 use VitesseCms\Datagroup\Repositories\DatagroupRepository;
 use VitesseCms\Mustache\Enum\ViewEnum;
@@ -17,18 +16,18 @@ use VitesseCms\Mustache\Repositories\AdminRepositoryCollection;
 
 class Module extends AbstractModule
 {
-    public function registerServices(DiInterface $di, string $string = null)
+    public function registerServices(DiInterface $di, string $module = null)
     {
         parent::registerServices($di, ViewEnum::MODULE);
-        if (AdminUtil::isAdminPage()) :
+        if (AdminUtil::isAdminPage()) {
             $di->setShared(
-                DatabaseEnum::REPOSITORIES,
+                'repositories',
                 new AdminRepositoryCollection(
                     new DatagroupRepository(),
                     new DatafieldRepository(),
                     new BlockRepository(Block::class)
                 )
             );
-        endif;
+        }
     }
 }
