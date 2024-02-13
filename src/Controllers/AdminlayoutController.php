@@ -20,7 +20,6 @@ use VitesseCms\Admin\Traits\TraitAdminModelEditable;
 use VitesseCms\Admin\Traits\TraitAdminModelList;
 use VitesseCms\Admin\Traits\TraitAdminModelPublishable;
 use VitesseCms\Admin\Traits\TraitAdminModelSave;
-use VitesseCms\Block\Enum\BlockEnum;
 use VitesseCms\Block\Repositories\BlockRepository;
 use VitesseCms\Core\AbstractControllerAdmin;
 use VitesseCms\Database\AbstractCollection;
@@ -65,7 +64,7 @@ class AdminlayoutController extends AbstractControllerAdmin implements
         $this->layoutRepository = $this->eventsManager->fire(LayoutEnum::GET_REPOSITORY->value, new stdClass());
         $this->datagroupRepository = $this->eventsManager->fire(DatagroupEnum::GET_REPOSITORY->value, new stdClass());
         $this->datafieldRepository = $this->eventsManager->fire(DatafieldEnum::GET_REPOSITORY->value, new stdClass());
-        $this->blockRepository = $this->eventsManager->fire(BlockEnum::GET_REPOSITORY->value, new stdClass());
+        $this->blockRepository = new BlockRepository();
     }
 
     public function getModel(string $id): ?AbstractCollection
